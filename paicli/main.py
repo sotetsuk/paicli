@@ -12,7 +12,6 @@ from .api import API
 
 
 config = Config()
-config.load_config()
 api = API(config)
 
 @click.group()
