@@ -48,8 +48,6 @@ class Jobs(object):
                 state = colored(state, "cyan")
             elif state == "FAILED":
                 state = colored(state, "red")
-            else:
-                state = colored(state, "white")
 
             tab.add_row([line["name"], line["username"], line["virtualCluster"],
                          line["createdTime"], line["retries"], state])
