@@ -2,6 +2,7 @@ import json
 import requests
 from termcolor import colored
 
+
 class API(object):
 
     """API client for PAI
@@ -47,7 +48,7 @@ class API(object):
         if res.ok:
             return res.content
         else:
-            print(res.raise_for_status())
+            res.raise_for_status()
 
     def get_jobs_jobname(self, jobname):
         pass

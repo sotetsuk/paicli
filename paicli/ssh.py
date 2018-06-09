@@ -11,7 +11,7 @@ def download_sshkey(content):
         sshkey = res.content
         return sshkey
     else:
-        print(res.raise_for_status())
+        res.raise_for_status()
 
 
 def run_ssh(config, content, sshkey):
@@ -27,7 +27,7 @@ def run_ssh(config, content, sshkey):
             f.writelines(sshkey)
         os.chmod(path_to_sshkey, 0o600)
     except Exception as e:
-        print(e)
+        raise e
 
     cmd = ["ssh", "-i", path_to_sshkey, "-p", port, "root@{}".format(host)]
     try:
