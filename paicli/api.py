@@ -11,8 +11,19 @@ class API(object):
     def __init__(self, api_info):
         self.api_info = api_info
 
-    def post_token(self):
-        pass
+    def post_token(self, username, password, expiration=60):
+        url = "{}/api/{}/token".format(self.api_info.uri, self.api_info.version)
+        params = {
+            "username": username,
+            "password": password,
+            "expiration": expiration
+        }
+        res = requests.post(url, params=params)
+
+        if res.ok:
+            return res.content
+        else:
+            print(res.raise_for_status())
 
     def put_user(self):
         pass

@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+import sys
 import click
 import json
 
@@ -9,6 +10,8 @@ from .ssh import download_sshkey, run_ssh
 from .intereactive import select_job_interactively
 from .api import API
 
+if sys.version_info[0] == 2:
+    input = raw_input
 
 config = Config()
 config.load_config()
@@ -19,6 +22,12 @@ api = API(api_info)
 @click.group()
 def main():
     pass
+
+
+@click.command("token", help="Update access token.")
+def tokencmd():
+    ret = api.post_token(config.username, input("password:\n"), 60)
+    print(ret)
 
 
 @click.command(name="ssh")
@@ -50,6 +59,7 @@ def jobscmd(username, state, n):
     jobs.show(n)
 
 
+main.add_command(tokencmd)
 main.add_command(sshcmd)
 main.add_command(jobscmd)
 
