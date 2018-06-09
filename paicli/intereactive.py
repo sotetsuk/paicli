@@ -1,3 +1,7 @@
+"""paicli: A CLI tool for PAI (Platform for AI).
+
+Author: Sotetsu KOYAMADA
+"""
 from __future__ import unicode_literals
 from prompt_toolkit.application import Application
 from prompt_toolkit.interface import CommandLineInterface

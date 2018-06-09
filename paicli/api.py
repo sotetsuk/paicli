@@ -1,3 +1,7 @@
+"""paicli: A CLI tool for PAI (Platform for AI).
+
+Author: Sotetsu KOYAMADA
+"""
 import json
 import requests
 from termcolor import colored

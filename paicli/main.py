@@ -1,3 +1,7 @@
+"""paicli: A CLI tool for PAI (Platform for AI).
+
+Author: Sotetsu KOYAMADA
+"""
 from __future__ import print_function
 
 import sys
