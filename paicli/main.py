@@ -1,7 +1,9 @@
 from __future__ import print_function
 
+import sys
 import click
 import json
+import getpass
 from termcolor import colored
 
 from .config import Config
@@ -10,6 +12,8 @@ from .ssh import download_sshkey, run_ssh
 from .intereactive import select_job_interactively
 from .api import API
 
+if sys.version_info[0] == 2:
+    input = raw_input
 
 config = Config()
 api = API(config)
@@ -17,6 +21,15 @@ api = API(config)
 @click.group()
 def main():
     pass
+
+
+@click.command("token", help="Update access token.")
+@click.option('--expiration', '-e', type=int, default=500000, help="Expiration time.")
+def tokencmd(expiration):
+    ret = api.post_token(config.username, getpass.getpass("Enter password:\n"), expiration)
+    token = json.loads(ret)['token']
+    config.access_token = token
+    config.write_accesstoken()
 
 
 @click.command(name="ssh")
@@ -60,11 +73,9 @@ def submitcmd(job_config_json):
               .format(json.loads(job_config_json)['jobName']))
     except Exception as e:
         print(e)
-        print("Please check one of:")
-        print("  - wrong API host or port")
-        print("  - duplicated submission")
-        print("  - access token expiration")
 
+
+main.add_command(tokencmd)
 main.add_command(sshcmd)
 main.add_command(jobscmd)
 main.add_command(submitcmd)

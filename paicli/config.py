@@ -72,6 +72,13 @@ class Config(object):
             }
             f.writelines(yaml.dump(config_dic, default_flow_style=False))
 
+    def write_accesstoken(self):
+        if not self.path_to_configdir:
+            os.makedirs(self.path_to_configdir)
+
+        with open(self.path_to_accesstoken, 'w') as f:
+            f.write(self.access_token)
+
     @property
     def port(self):
         return self._port
