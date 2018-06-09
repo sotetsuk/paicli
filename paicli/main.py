@@ -76,10 +76,27 @@ def submitcmd(job_config_json):
         print(e)
 
 
+@click.command(name="stop", help="Stop a job in PAI.")
+@click.option('--jobname', '-j', type=str, default="")
+def stopcmd(jobname):
+    if not jobname:
+        jobs = Jobs(api, config.username)
+        jobs.filter({'state': ['RUNNING']})
+        jobname = select_job_interactively(jobs)
+
+    try:
+        api.put_jobs_jobname_executiontype(jobname, "STOP")
+        print(colored("Stop signal submitted!", "green") + ": {}".format(jobname))
+    except Exception as e:
+        print(e)
+
+
 main.add_command(tokencmd)
 main.add_command(sshcmd)
 main.add_command(jobscmd)
 main.add_command(submitcmd)
+main.add_command(stopcmd)
+
 
 if __name__ == '__main__':
     main()
