@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import click
 import json
+from termcolor import colored
 
 from .config import Config
 from .jobs import Jobs
@@ -11,7 +12,6 @@ from .api import API
 
 
 config = Config()
-config.load_config()
 api = API(config)
 
 @click.group()
@@ -48,8 +48,26 @@ def jobscmd(username, state, n):
     jobs.show(n)
 
 
+@click.command(name="submit")
+@click.argument('job_config_json')
+def submitcmd(job_config_json):
+    with open(job_config_json, 'r') as f:
+        job_config_json = ''.join([line.strip('\n').strip() for line in f.readlines()])
+
+    try:
+        api.post_jobs(job_config_json)
+        print(colored("Successfully submitted!", "green") + ": {}"
+              .format(json.loads(job_config_json)['jobName']))
+    except Exception as e:
+        print(e)
+        print("Please check one of:")
+        print("  - wrong API host or port")
+        print("  - duplicated submission")
+        print("  - access token expiration")
+
 main.add_command(sshcmd)
 main.add_command(jobscmd)
+main.add_command(submitcmd)
 
 if __name__ == '__main__':
     main()

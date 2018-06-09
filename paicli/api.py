@@ -1,3 +1,4 @@
+import json
 import requests
 
 
@@ -39,8 +40,19 @@ class API(object):
     def get_jobs_jobname(self, jobname):
         pass
 
-    def post_jobs(self):
-        pass
+    def post_jobs(self, job_config_json):
+        url = "{}/api/{}/jobs".format(self.config.api_uri, self.config.api_version)
+        headers = {
+            "Authorization": "Bearer {}".format(self.config.access_token),
+            "Content-type": "application/json"
+        }
+
+        res = requests.post(url, headers=headers, data=job_config_json)
+
+        if res.ok:
+            return res.content
+        else:
+            print(res.raise_for_status())
 
     def get_jobs_jobname_config(self, jobname):
         pass
@@ -52,7 +64,7 @@ class API(object):
         if res.ok:
             return res.content
         else:
-            print(res.raise_for_status())
+            res.raise_for_status()
 
     def put_jobs_jobname_executiontype(self, jobname):
         pass
