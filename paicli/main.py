@@ -4,8 +4,9 @@ import sys
 import click
 import json
 import getpass
+from termcolor import colored
 
-from .config import Config, APIInfo
+from .config import Config
 from .jobs import Jobs
 from .ssh import download_sshkey, run_ssh
 from .intereactive import select_job_interactively
@@ -15,10 +16,7 @@ if sys.version_info[0] == 2:
     input = raw_input
 
 config = Config()
-config.load_config()
-api_info = APIInfo(config)
-api = API(api_info)
-
+api = API(config)
 
 @click.group()
 def main():
@@ -61,9 +59,28 @@ def jobscmd(username, state, n):
     jobs.show(n)
 
 
+@click.command(name="submit")
+@click.argument('job_config_json')
+def submitcmd(job_config_json):
+    with open(job_config_json, 'r') as f:
+        job_config_json = ''.join([line.strip('\n').strip() for line in f.readlines()])
+
+    try:
+        api.post_jobs(job_config_json)
+        print(colored("Successfully submitted!", "green") + ": {}"
+              .format(json.loads(job_config_json)['jobName']))
+    except Exception as e:
+        print(e)
+        print("Please check one of:")
+        print("  - wrong API host or port")
+        print("  - duplicated submission")
+        print("  - access token expiration")
+
+
 main.add_command(tokencmd)
 main.add_command(sshcmd)
 main.add_command(jobscmd)
+main.add_command(submitcmd)
 
 if __name__ == '__main__':
     main()
