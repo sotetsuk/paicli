@@ -29,8 +29,10 @@ class Jobs(object):
         _content = []
         for job in self._jobs:
             for key, val in dic.items():
-                if job[key] in val:
-                    _content.append(job)
+                if job[key] not in val:
+                    break
+            else:
+                _content.append(job)
 
         self._jobs = _content
 
