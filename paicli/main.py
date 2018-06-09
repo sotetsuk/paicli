@@ -24,7 +24,7 @@ def main():
 
 
 @click.command("token", help="Update access token.")
-@click.option('--expiration', '-e', type=int, default=60, help="Expiration time.")
+@click.option('--expiration', '-e', type=int, default=500000, help="Expiration time.")
 def tokencmd(expiration):
     ret = api.post_token(config.username, getpass.getpass("Enter password:\n"), expiration)
     token = json.loads(ret)['token']
