@@ -54,10 +54,7 @@ class API(object):
 
     def post_jobs(self, job_config_json):
         url = "{}/api/{}/jobs".format(self.config.api_uri, self.config.api_version)
-        headers = {
-            "Authorization": "Bearer {}".format(self.config.access_token),
-            "Content-type": "application/json"
-        }
+        headers = self._headers_with_auth()
 
         res = requests.post(url, headers=headers, data=job_config_json)
 
@@ -88,11 +85,26 @@ class API(object):
         else:
             res.raise_for_status()
 
-    def put_jobs_jobname_executiontype(self, jobname):
-        pass
+    def put_jobs_jobname_executiontype(self, job_name, value):
+        url = "{}/api/{}/jobs/{}/executionType".format(self.config.api_uri, self.config.api_version, job_name)
+        headers = self._headers_with_auth()
+        data = json.dumps({"value": value})
+
+        res = requests.put(url, headers=headers, data=data)
+        if res.ok:
+            return res.content
+        else:
+            res.raise_for_status()
 
     def get_virtualclusters(self):
         pass
 
     def get_virtualclusters_vcname(self, vcname):
         pass
+
+    def _headers_with_auth(self):
+        headers = {
+            "Authorization": "Bearer {}".format(self.config.access_token),
+            "Content-type": "application/json"
+        }
+        return headers
