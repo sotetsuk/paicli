@@ -77,8 +77,8 @@ class API(object):
         pass
 
     def get_jobs_jobname_ssh(self, jobname):
-        uri = "{}/api/{}/jobs/{}/ssh".format(self.config.api_uri, self.config.api_version, jobname)
-        res = requests.get(uri)
+        url = "{}/api/{}/jobs/{}/ssh".format(self.config.api_uri, self.config.api_version, jobname)
+        res = requests.get(url)
 
         if res.ok:
             return res.content
