@@ -64,7 +64,7 @@ class API(object):
         if res.ok:
             return res.content
         else:
-            print(res.raise_for_status())
+            res.raise_for_status()
 
     def put_jobs_jobname_executiontype(self, jobname):
         pass

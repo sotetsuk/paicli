@@ -53,11 +53,17 @@ def jobscmd(username, state, n):
 def submitcmd(job_config_json):
     with open(job_config_json, 'r') as f:
         job_config_json = ''.join([line.strip('\n').strip() for line in f.readlines()])
-    results = api.post_jobs(job_config_json)
-    if results:
+
+    try:
+        api.post_jobs(job_config_json)
         print(colored("Successfully submitted!", "green") + ": {}"
               .format(json.loads(job_config_json)['jobName']))
-
+    except Exception as e:
+        print(e)
+        print("Please check one of:")
+        print("  - wrong API host or port")
+        print("  - duplicated submission")
+        print("  - access token expiration")
 
 main.add_command(sshcmd)
 main.add_command(jobscmd)
