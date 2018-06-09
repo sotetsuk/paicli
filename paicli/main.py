@@ -18,7 +18,8 @@ if sys.version_info[0] == 2:
 config = Config()
 api = API(config)
 
-@click.group()
+
+@click.group(help="A CLI for Open Platform for AI (PAI).")
 def main():
     pass
 
@@ -32,7 +33,7 @@ def tokencmd(expiration):
     config.write_accesstoken()
 
 
-@click.command(name="ssh")
+@click.command(name="ssh", help="SSH into a running container in PAI.")
 @click.option('--jobname', '-j', type=str, default="")
 def sshcmd(jobname):
     if not jobname:
@@ -45,7 +46,7 @@ def sshcmd(jobname):
     run_ssh(config, content, sshkey)
 
 
-@click.command(name="jobs")
+@click.command(name="jobs", help="Show jobs in PAI.")
 @click.option('--username', '-u', multiple=True)
 @click.option('--state', '-s', multiple=True)
 @click.option('-n', type=int, default=20)
@@ -61,7 +62,7 @@ def jobscmd(username, state, n):
     jobs.show(n)
 
 
-@click.command(name="submit")
+@click.command(name="submit", help="Submit your job into PAI.")
 @click.argument('job_config_json')
 def submitcmd(job_config_json):
     with open(job_config_json, 'r') as f:
