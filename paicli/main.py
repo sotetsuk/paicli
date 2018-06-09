@@ -73,10 +73,6 @@ def submitcmd(job_config_json):
               .format(json.loads(job_config_json)['jobName']))
     except Exception as e:
         print(e)
-        print("Please check one of:")
-        print("  - wrong API host or port")
-        print("  - duplicated submission")
-        print("  - access token expiration")
 
 
 main.add_command(tokencmd)
