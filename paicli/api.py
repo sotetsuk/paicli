@@ -1,4 +1,3 @@
-import json
 import requests
 
 
@@ -33,7 +32,7 @@ class API(object):
         res = requests.get(url=url, params=params)
 
         if res.ok:
-            return json.loads(res.content)
+            return res.content
         else:
             print(res.raise_for_status())
 
@@ -51,7 +50,7 @@ class API(object):
         res = requests.get(uri)
 
         if res.ok:
-            return json.loads(res.content)
+            return res.content
         else:
             print(res.raise_for_status())
 

@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import click
+import json
 
 from .config import Config, APIInfo
 from .jobs import Jobs
@@ -28,7 +29,7 @@ def sshcmd(jobname):
         jobs.filter({'state': ['RUNNING']})
         jobname = select_job_interactively(jobs)
 
-    content = api.get_jobs_jobname_ssh(jobname)
+    content = json.loads(api.get_jobs_jobname_ssh(jobname))
     sshkey = download_sshkey(content)
     run_ssh(config, content, sshkey)
 

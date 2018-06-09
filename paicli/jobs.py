@@ -1,5 +1,6 @@
 from __future__ import division
 from datetime import datetime
+import json
 from prettytable import PrettyTable
 from termcolor import colored
 
@@ -9,7 +10,7 @@ class Jobs(object):
     def __init__(self, api, username=""):
 
         self._api = api
-        self._jobs = self._api.get_jobs(username)
+        self._jobs = json.loads(self._api.get_jobs(username))
         for job in self._jobs:
             job["createdTime"] = datetime.fromtimestamp(int(job["createdTime"]) / 1000).strftime('%Y-%m-%d %H:%M:%S')
 
