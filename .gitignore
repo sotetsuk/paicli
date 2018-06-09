@@ -1,0 +1,6 @@
+*.pyc
+build/
+dist/
+paicli.egg-info/
+paicli.iml
+.idea/*
