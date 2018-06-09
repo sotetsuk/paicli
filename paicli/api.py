@@ -13,7 +13,7 @@ class API(object):
         self.config = config
 
     def post_token(self, username, password, expiration=60):
-        url = "{}/api/{}/token".format(self.api_info.uri, self.api_info.version)
+        url = "{}/api/{}/token".format(self.config.api_uri, self.config.api_version)
         headers = {"Content-type": "application/json"}
         data = json.dumps({
             "username": username,

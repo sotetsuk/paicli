@@ -24,10 +24,12 @@ def main():
 
 
 @click.command("token", help="Update access token.")
-@click.option('--expiration' '-e', type=int, help="Expiration time ")
-def tokencmd():
-    ret = api.post_token(config.username, getpass.getpass("Enter password:\n"), 60)
-    print(json.loads(ret)['token'])
+@click.option('--expiration', '-e', type=int, default=60, help="Expiration time.")
+def tokencmd(expiration):
+    ret = api.post_token(config.username, getpass.getpass("Enter password:\n"), expiration)
+    token = json.loads(ret)['token']
+    config.access_token = token
+    config.write_accesstoken()
 
 
 @click.command(name="ssh")
