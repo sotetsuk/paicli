@@ -19,7 +19,7 @@ config = Config()
 api = API(config)
 
 
-@click.group(help="A CLI for Open Platform for AI (PAI).")
+@click.group(help="A CLI tool for PAI (Platform for AI).")
 def main():
     pass
 
