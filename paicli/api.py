@@ -76,8 +76,8 @@ class API(object):
     def get_jobs_jobname_config(self, jobname):
         pass
 
-    def get_jobs_jobname_ssh(self, job_name):
-        uri = "{}/api/{}/jobs/{}/ssh".format(self.config.api_uri, self.config.api_version, job_name)
+    def get_jobs_jobname_ssh(self, jobname):
+        uri = "{}/api/{}/jobs/{}/ssh".format(self.config.api_uri, self.config.api_version, jobname)
         res = requests.get(uri)
 
         if res.ok:
@@ -85,8 +85,8 @@ class API(object):
         else:
             res.raise_for_status()
 
-    def put_jobs_jobname_executiontype(self, job_name, value):
-        url = "{}/api/{}/jobs/{}/executionType".format(self.config.api_uri, self.config.api_version, job_name)
+    def put_jobs_jobname_executiontype(self, jobname, value):
+        url = "{}/api/{}/jobs/{}/executionType".format(self.config.api_uri, self.config.api_version, jobname)
         headers = self._headers_with_auth()
         data = json.dumps({"value": value})
 
