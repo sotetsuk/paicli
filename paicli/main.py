@@ -16,8 +16,6 @@ from .ssh import download_sshkey, run_ssh
 from .intereactive import select_job_interactively
 from .api import API
 
-if sys.version_info[0] == 2:
-    input = raw_input
 
 config = Config()
 api = API(config)
@@ -34,7 +32,7 @@ def tokencmd(expiration):
     ret = api.post_token(config.username, getpass.getpass("Enter password:\n"), expiration)
     token = json.loads(ret)['token']
     config.access_token = token
-    config.write_accesstoken()
+    config.write_access_token()
 
 
 @click.command(name="ssh", help="SSH into a running container in PAI.")
