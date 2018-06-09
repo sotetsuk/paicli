@@ -3,6 +3,7 @@ from __future__ import print_function
 import sys
 import click
 import json
+import getpass
 
 from .config import Config, APIInfo
 from .jobs import Jobs
@@ -25,9 +26,10 @@ def main():
 
 
 @click.command("token", help="Update access token.")
+@click.option('--expiration' '-e', type=int, help="Expiration time ")
 def tokencmd():
-    ret = api.post_token(config.username, input("password:\n"), 60)
-    print(ret)
+    ret = api.post_token(config.username, getpass.getpass("Enter password:\n"), 60)
+    print(json.loads(ret)['token'])
 
 
 @click.command(name="ssh")
