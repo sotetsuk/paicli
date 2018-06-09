@@ -1,7 +1,8 @@
 # paicli
 
+## How to build
+
 ```sh
-$ paicli jobs
-$ paicli ssh
-$ paicli run 
+$ make build
 ```
+
