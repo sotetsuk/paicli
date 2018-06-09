@@ -6,22 +6,34 @@ import yaml
 class Config(object):
 
     def __init__(self):
+        # consts
         self._paicli_dirname = ".paicli"
+        self._configfile = "config.yaml"
+        self._accesstoken = "access_token"
+
+        # paths
+        self.path_to_configdir = os.path.join(os.environ['HOME'], self._paicli_dirname)
+        self.path_to_configfile = os.path.join(os.environ['HOME'],
+                                               self._paicli_dirname, self._configfile)
+        self.path_to_accesstoken = os.path.join(os.environ['HOME'],
+                                                self._paicli_dirname, self._accesstoken)
+
+        # configs
         self.host = "10.0.3.9"
         self._port = 9286
         self._api_port = 9186
         self.username = ""
         self.password = ""  # TODO: fix to use stdin like docker-cli
+        self.access_token = None
+        self.api_uri = "http://{}:{}".format(self.host, self.api_port)
+        self.api_version = "v1"
 
-        # consts
-        self._configfile = "config.yaml"
-
-        self.path_to_configdir = os.path.join(os.environ['HOME'], self.paicli_dirname)
-        self.path_to_configfile = os.path.join(os.environ['HOME'],
-                                               self.paicli_dirname, self._configfile)
+        # load config files
+        self.load_config()
+        self.load_accesstoken()
 
     def load_config(self):
-        if not self.path_to_configdir:
+        if not os.path.exists(self.path_to_configdir):
             return
 
         try:
@@ -37,6 +49,14 @@ class Config(object):
         self.api_port = config["api_port"]
         self.username = config["username"]
         self.password = config["password"]
+        self.api_uri = "http://{}:{}".format(self.host, self.api_port)
+
+    def load_accesstoken(self):
+        if not os.path.exists(self.path_to_accesstoken):
+            return
+
+        with open(self.path_to_accesstoken, 'r') as f:
+            self.access_token = f.readline().strip('\n').strip()
 
     def write_config(self):
         if not self.path_to_configdir:
@@ -51,17 +71,6 @@ class Config(object):
                 "password": str(self.password)
             }
             f.writelines(yaml.dump(config_dic, default_flow_style=False))
-
-    @property
-    def paicli_dirname(self):
-        return self._paicli_dirname
-
-    @paicli_dirname.setter
-    def paicli_dirname(self, paicli_dirname):
-        self._paicli_dirname = paicli_dirname
-        self.path_to_configdir = os.path.join(os.environ['HOME'], self.paicli_dirname)
-        self.path_to_configfile = os.path.join(os.environ['HOME'],
-                                               self.paicli_dirname, self._configfile)
 
     @property
     def port(self):
@@ -79,12 +88,3 @@ class Config(object):
     def api_port(self, api_port):
         self._api_port = int(api_port)
 
-
-class APIInfo(object):
-
-    def __init__(self, config):
-        self.url = config.host
-        self.port = config.api_port
-        self.version = "v1"
-
-        self.uri = "http://{}:{}".format(self.url, self.port)

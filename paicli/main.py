@@ -3,7 +3,7 @@ from __future__ import print_function
 import click
 import json
 
-from .config import Config, APIInfo
+from .config import Config
 from .jobs import Jobs
 from .ssh import download_sshkey, run_ssh
 from .intereactive import select_job_interactively
@@ -12,9 +12,7 @@ from .api import API
 
 config = Config()
 config.load_config()
-api_info = APIInfo(config)
-api = API(api_info)
-
+api = API(config)
 
 @click.group()
 def main():
