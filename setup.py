@@ -10,7 +10,7 @@ setup(
     license='MIT',
     install_requires=["requests",
                       "pyyaml",
-                      "prompt_toolkit",
+                      "prompt_toolkit==1.0.9",
                       "prettytable",
                       "termcolor",
                       "click",
