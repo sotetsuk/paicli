@@ -43,7 +43,7 @@ class Jobs(object):
 
     def show(self, n=None):
         tab = PrettyTable()
-        tab.field_names = ["name", "username", "virtualCluster", "createdTime", "retries", "state"]
+        tab.field_names = ["name", "username", "virtual cluster", "created time", "retries", "state"]
         for i, line in enumerate(self):
             state = line["state"]
             if state == "SUCCEEDED":
