@@ -36,10 +36,9 @@ class Config(object):
     api_version = "v1"
 
     def __init__(self):
-        if not os.path.exists(self.path_to_configdir):
-            self.initialize()
+        pass
 
-        # load config files
+    def load(self):
         self.load_config()
         self.load_access_token()
 
@@ -63,16 +62,9 @@ class Config(object):
         self.write_access_token()
 
     def load_config(self):
-        if not os.path.exists(self.path_to_configdir):
-            return
-
-        try:
-            with open(self.path_to_configfile) as f:
-                yaml_config = ''.join(f.readlines())
-                config = yaml.load(yaml_config)
-        except Exception as e:
-            print("Failed to load config file from '{}':\n  {}".format(self.path_to_configfile, e))
-            return
+        with open(self.path_to_configfile) as f:
+            yaml_config = ''.join(f.readlines())
+            config = yaml.load(yaml_config)
 
         self.host = config["host"]
         self.port = config["port"]
@@ -81,7 +73,7 @@ class Config(object):
 
     def load_access_token(self):
         if not os.path.exists(self.path_to_accesstoken):
-            return None
+            return
 
         with open(self.path_to_accesstoken, 'r') as f:
             self.access_token = f.readline().strip('\n').strip()

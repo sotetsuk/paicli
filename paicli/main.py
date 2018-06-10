@@ -4,7 +4,6 @@ Author: Sotetsu KOYAMADA
 """
 from __future__ import print_function
 
-import sys
 import click
 import json
 import getpass
@@ -16,9 +15,15 @@ from .ssh import download_sshkey, run_ssh
 from .intereactive import select_job_interactively
 from .api import API
 
-
 config = Config()
-api = API(config)
+
+
+def load_config():
+    try:
+        config.load()
+    except FileNotFoundError as e:
+        print("Config file does not exist. Run 'paicli config'")
+        exit(1)
 
 
 @click.group(help="A CLI tool for PAI (Platform for AI).")
@@ -26,9 +31,17 @@ def main():
     pass
 
 
+@click.command("config", help="Initialize your config information in $HOME/.paicli")
+def configcmd():
+    config.initialize()
+
+
 @click.command("token", help="Update access token.")
 @click.option('--expiration', '-e', type=int, default=500000, help="Expiration time.")
 def tokencmd(expiration):
+    load_config()
+    api = API(config)
+
     ret = api.post_token(config.username, getpass.getpass("Enter password:\n"), expiration)
     token = json.loads(ret)['token']
     config.access_token = token
@@ -38,6 +51,9 @@ def tokencmd(expiration):
 @click.command(name="ssh", help="SSH into a running container in PAI.")
 @click.option('--jobname', '-j', type=str, default="")
 def sshcmd(jobname):
+    load_config()
+    api = API(config)
+
     if not jobname:
         jobs = Jobs(api, config.username)
         jobs.filter({'state': ['RUNNING']})
@@ -53,6 +69,9 @@ def sshcmd(jobname):
 @click.option('--state', '-s', multiple=True)
 @click.option('-n', type=int, default=20)
 def jobscmd(username, state, n):
+    load_config()
+    api = API(config)
+
     jobs = Jobs(api)
     filter_dic = {}
     if len(username) != 0:
@@ -67,6 +86,9 @@ def jobscmd(username, state, n):
 @click.command(name="submit", help="Submit your job into PAI.")
 @click.argument('job_config_json')
 def submitcmd(job_config_json):
+    load_config()
+    api = API(config)
+
     with open(job_config_json, 'r') as f:
         job_config_json = ''.join([line.strip('\n').strip() for line in f.readlines()])
 
@@ -81,6 +103,9 @@ def submitcmd(job_config_json):
 @click.command(name="stop", help="Stop a job in PAI.")
 @click.option('--jobname', '-j', type=str, default="")
 def stopcmd(jobname):
+    load_config()
+    api = API(config)
+
     if not jobname:
         jobs = Jobs(api, config.username)
         jobs.filter({'state': ['RUNNING']})
@@ -93,6 +118,7 @@ def stopcmd(jobname):
         print(e)
 
 
+main.add_command(configcmd)
 main.add_command(tokencmd)
 main.add_command(sshcmd)
 main.add_command(jobscmd)
