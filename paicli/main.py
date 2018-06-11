@@ -40,7 +40,11 @@ def main():
 
 @click.command("config", help="Initialize your config information in $HOME/.paicli")
 def configcmd():
-    config.initialize()
+    try:
+        config.initialize()
+    except requests.HTTPError as e:
+        print(colored("Failed to update access token.\n", "red"))
+        print(e)
 
 
 @click.command("token", help="Update access token.")
@@ -49,10 +53,14 @@ def tokencmd(expiration):
     load_config()
     api = API(config)
 
-    ret = api.post_token(config.username, getpass.getpass("Enter password:\n"), expiration)
-    token = json.loads(ret)['token']
-    config.access_token = token
-    config.write_access_token()
+    try:
+        ret = api.post_token(config.username, getpass.getpass("Enter password:\n"), expiration)
+        token = json.loads(ret)['token']
+        config.access_token = token
+        config.write_access_token()
+    except requests.HTTPError as e:
+        print(colored("Failed to update access token.\n", "red"))
+        print(e)
 
 
 @click.command(name="ssh", help="SSH into a running container in PAI.")
