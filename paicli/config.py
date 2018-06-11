@@ -40,7 +40,6 @@ class Config(object):
 
     def load(self):
         self.load_config()
-        # self.load_access_token()
 
     def initialize(self):
         print("-" * 60)
