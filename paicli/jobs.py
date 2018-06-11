@@ -21,6 +21,9 @@ class Jobs(object):
     def __getitem__(self, item):
         return self._jobs[item]
 
+    def __len__(self):
+        return len(self._jobs)
+
     def filter(self, dic):
         """Filter jobs
 

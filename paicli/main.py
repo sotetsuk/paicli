@@ -74,6 +74,9 @@ def sshcmd(jobname):
     if not jobname:
         jobs = Jobs(api, config.username)
         jobs.filter({'state': ['RUNNING']})
+        if len(jobs) == 0:
+            print("There is no running jobs.")
+            exit(1)
         jobname = select_job_interactively(jobs)
 
     content = json.loads(api.get_jobs_jobname_ssh(jobname))
