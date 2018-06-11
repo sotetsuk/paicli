@@ -5,7 +5,7 @@ clear:
 	rm -rf dist
 	rm -rf *.egg-info
 	find . -name "*pycache*" | xargs rm -rf
-	rm paicli/*.pyc
+	find paicli -name "*.pyc" | xargs rm
 
 build:
 	python setup.py install
