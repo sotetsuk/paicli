@@ -117,12 +117,12 @@ def submitcmd(job_config_json):
         print(colored("Successfully submitted!", "green") + ": {}"
               .format(json.loads(job_config_json)['jobName']))
     except requests.HTTPError as e:
-        status_code = str(e).split()[0]
-        if status_code == '401':
+        status_code = e.response.status_code
+        if status_code == 401:
             print(colored("Submission failed.", "red"))
             print("Access token seems to be expired.")
             print("Update your token by 'paicli token', then try again.\n")
-        elif status_code == '400':
+        elif status_code == 400:
             print(colored("Submission failed.", "red"))
             print("This may be caused by duplicated submission.\n")
         else:
@@ -163,33 +163,23 @@ def stopcmd(jobname):
         api.put_jobs_jobname_executiontype(jobname, "STOP")
         print(colored("Stop signal submitted!", "green") + ": {}".format(jobname))
     except requests.HTTPError as e:
-        status_code = str(e).split()[0]
-        if status_code == '401':
-            print(colored("Submission failed.", "red"))
-            print("Access token seems to be expired.")
-            print("Update your token by 'paicli token', then try again.\n")
-        elif status_code == '400':
-            print(colored("Submission failed.", "red"))
-            print("This may be caused by duplicated submission.\n")
-        else:
-            print(colored("Submission failed.\n", "red"))
-
+        print(colored("Failed to submit a stop signal.\n", "red"))
         print(e)
         exit(1)
     except requests.Timeout as e:
-        print(colored("Submission failed.\n", "red"))
+        print(colored("Failed to submit a stop signal.\n", "red"))
         print(e)
         exit(1)
     except requests.ConnectionError as e:
-        print(colored("Submission failed.\n", "red"))
+        print(colored("Failed to submit a stop signal.\n", "red"))
         print(e)
         exit(1)
     except requests.RequestException as e:
-        print(colored("Submission failed.\n", "red"))
+        print(colored("Failed to submit a stop signal.\n", "red"))
         print(e)
         exit(1)
     except FileNotFoundError:
-        print(colored("Submission failed.\n", "red"))
+        print(colored("Failed to submit a stop signal.\n", "red"))
         print("Access token does not exist. Run 'paicli token'")
         exit(1)
 
