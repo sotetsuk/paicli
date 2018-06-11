@@ -26,12 +26,10 @@ def run_ssh(config, content, sshkey):
     if os.path.exists(path_to_sshkey):
         os.remove(path_to_sshkey)
 
-    try:
-        with open(path_to_sshkey, 'w') as f:
-            f.writelines(sshkey)
-        os.chmod(path_to_sshkey, 0o600)
-    except Exception as e:
-        raise e
+    with open(path_to_sshkey, 'w') as f:
+        sshkey = sshkey.decode('utf-8')
+        f.writelines(sshkey)
+    os.chmod(path_to_sshkey, 0o600)
 
     cmd = ["ssh", "-i", path_to_sshkey, "-p", port, "root@{}".format(host)]
     try:
