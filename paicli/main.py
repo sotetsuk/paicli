@@ -67,7 +67,8 @@ def tokencmd(expiration):
 
 @click.command(name="ssh", help="SSH into a running container in PAI.")
 @click.option('--jobname', '-j', type=str, default="")
-def sshcmd(jobname):
+@click.option('--dryrun', '-d', is_flag=True)
+def sshcmd(jobname, dryrun):
     load_config()
     api = API(config)
 
@@ -92,7 +93,7 @@ def sshcmd(jobname):
         exit(1)
 
     sshkey = download_sshkey(content)
-    run_ssh(config, content, sshkey)
+    run_ssh(config, content, sshkey, dryrun)
 
 
 @click.command(name="jobs", help="Show jobs in PAI.")

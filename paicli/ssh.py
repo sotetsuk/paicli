@@ -15,7 +15,7 @@ def download_sshkey(content):
     return sshkey
 
 
-def run_ssh(config, content, sshkey):
+def run_ssh(config, content, sshkey, dryrun=False):
     path_to_sshkey = os.path.join(config.path_to_configdir, ".tmpkey")
     host = content["containers"][0]["sshIp"]
     port = content["containers"][0]["sshPort"]
@@ -29,8 +29,12 @@ def run_ssh(config, content, sshkey):
     os.chmod(path_to_sshkey, 0o600)
 
     cmd = ["ssh", "-i", path_to_sshkey, "-p", port, "root@{}".format(host)]
-    try:
-        subprocess.call(cmd)
-    finally:
-        if os.path.exists(path_to_sshkey):
-            os.remove(path_to_sshkey)
+
+    if dryrun:
+        print(' '.join(cmd))
+    else:
+        try:
+            subprocess.call(cmd)
+        finally:
+            if os.path.exists(path_to_sshkey):
+                os.remove(path_to_sshkey)
