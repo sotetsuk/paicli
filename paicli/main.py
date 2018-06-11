@@ -8,12 +8,19 @@ import click
 import json
 import getpass
 from termcolor import colored
+import requests
 
 from .config import Config
 from .jobs import Jobs
 from .ssh import download_sshkey, run_ssh
 from .intereactive import select_job_interactively
 from .api import API
+
+try:
+    FileNotFoundError
+except NameError:
+    FileNotFoundError = IOError
+
 
 config = Config()
 
@@ -97,8 +104,30 @@ def submitcmd(job_config_json):
         api.post_jobs(job_config_json)
         print(colored("Successfully submitted!", "green") + ": {}"
               .format(json.loads(job_config_json)['jobName']))
-    except Exception as e:
+    except requests.HTTPError as e:
+        status_code = str(e).split()[0]
+        if status_code == '401':
+            print(colored("Submission failed.", "red"))
+            print("Access token seems to be expired.")
+            print("Update your token by 'paicli token', then try again.\n")
+        elif status_code == '400':
+            print(colored("Submission failed.", "red"))
+            print("This may be caused by duplicated submission.\n")
+        else:
+            print(colored("Submission failed.\n", "red"))
+
         print(e)
+        exit(1)
+    except requests.Timeout as e:
+        print(e)
+        exit(1)
+    except requests.ConnectionError as e:
+        print(e)
+        exit(1)
+    except FileNotFoundError as e:
+        print(e)
+        print("Access token does not exist. Run 'paicli token'")
+        exit(1)
 
 
 @click.command(name="stop", help="Stop a job in PAI.")
@@ -115,8 +144,16 @@ def stopcmd(jobname):
     try:
         api.put_jobs_jobname_executiontype(jobname, "STOP")
         print(colored("Stop signal submitted!", "green") + ": {}".format(jobname))
-    except Exception as e:
+    except requests.HTTPError as e:
         print(e)
+    except requests.Timeout as e:
+        print(e)
+        exit(1)
+    except requests.ConnectionError as e:
+        print(e)
+        exit(1)
+    except FileNotFoundError:
+        print("Access token does not exist. Run 'paicli token'")
 
 
 main.add_command(configcmd)

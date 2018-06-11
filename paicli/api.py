@@ -4,7 +4,6 @@ Author: Sotetsu KOYAMADA
 """
 import json
 import requests
-from termcolor import colored
 
 
 class API(object):
@@ -65,17 +64,7 @@ class API(object):
 
         if res.ok:
             return res.content
-        elif res.status_code == 401:
-            print(colored("Submission failed.", "red"))
-            print("Access token seems to be expired.")
-            print("Update your token by 'paicli token', then try again.\n")
-            res.raise_for_status()
-        elif res.status_code == 400:
-            print(colored("Submission failed.", "red"))
-            print("This may be caused by duplicated submission.\n")
-            res.raise_for_status()
         else:
-            print(colored("Submission failed.\n", "red"))
             res.raise_for_status()
 
     def get_jobs_jobname_config(self, jobname):
@@ -108,6 +97,7 @@ class API(object):
         pass
 
     def _headers_with_auth(self):
+        self.config.load_access_token()
         headers = {
             "Authorization": "Bearer {}".format(self.config.access_token),
             "Content-type": "application/json"

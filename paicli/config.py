@@ -72,9 +72,6 @@ class Config(object):
         self.username = config["username"]
 
     def load_access_token(self):
-        if not os.path.exists(self.path_to_accesstoken):
-            return
-
         with open(self.path_to_accesstoken, 'r') as f:
             self.access_token = f.readline().strip('\n').strip()
 
