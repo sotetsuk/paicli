@@ -79,7 +79,18 @@ def sshcmd(jobname):
             exit(1)
         jobname = select_job_interactively(jobs)
 
-    content = json.loads(api.get_jobs_jobname_ssh(jobname))
+    content = None
+    try:
+        content = json.loads(api.get_jobs_jobname_ssh(jobname))
+    except requests.HTTPError as e:
+        status_code = e.response.status_code
+        if status_code == 404:
+            print(colored("SSH failed.", "red"))
+            print("It seems that SSH is not ready yet. Wait a minute and try again.\n")
+
+        print(e)
+        exit(1)
+
     sshkey = download_sshkey(content)
     run_ssh(config, content, sshkey)
 
