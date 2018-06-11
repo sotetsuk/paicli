@@ -45,6 +45,7 @@ def configcmd():
     except requests.HTTPError as e:
         print(colored("Failed to update access token.\n", "red"))
         print(e)
+        exit(1)
 
 
 @click.command("token", help="Update access token.")
@@ -61,6 +62,7 @@ def tokencmd(expiration):
     except requests.HTTPError as e:
         print(colored("Failed to update access token.\n", "red"))
         print(e)
+        exit(1)
 
 
 @click.command(name="ssh", help="SSH into a running container in PAI.")
@@ -166,6 +168,7 @@ def stopcmd(jobname):
             print(colored("Submission failed.\n", "red"))
 
         print(e)
+        exit(1)
     except requests.Timeout as e:
         print(colored("Submission failed.\n", "red"))
         print(e)
@@ -177,6 +180,7 @@ def stopcmd(jobname):
     except FileNotFoundError:
         print(colored("Submission failed.\n", "red"))
         print("Access token does not exist. Run 'paicli token'")
+        exit(1)
 
 
 main.add_command(configcmd)
