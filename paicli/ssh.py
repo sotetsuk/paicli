@@ -11,11 +11,8 @@ import subprocess
 
 def download_sshkey(content):
     res = requests.get(content['keyPair']['privateKeyDirectDownloadLink'])
-    if res.ok:
-        sshkey = res.content
-        return sshkey
-    else:
-        res.raise_for_status()
+    sshkey = res.content
+    return sshkey
 
 
 def run_ssh(config, content, sshkey):
