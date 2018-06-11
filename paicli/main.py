@@ -138,6 +138,10 @@ def submitcmd(job_config_json):
         print(colored("Submission failed.\n", "red"))
         print(e)
         exit(1)
+    except requests.RequestException as e:
+        print(colored("Submission failed.\n", "red"))
+        print(e)
+        exit(1)
     except FileNotFoundError as e:
         print(colored("Submission failed.\n", "red"))
         print("Access token does not exist. Run 'paicli token'")
@@ -177,6 +181,10 @@ def stopcmd(jobname):
         print(e)
         exit(1)
     except requests.ConnectionError as e:
+        print(colored("Submission failed.\n", "red"))
+        print(e)
+        exit(1)
+    except requests.RequestException as e:
         print(colored("Submission failed.\n", "red"))
         print(e)
         exit(1)
