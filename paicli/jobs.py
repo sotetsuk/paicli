@@ -56,7 +56,7 @@ class Jobs(object):
             tab.add_row([line["name"], line["username"], line["virtualCluster"],
                          line["createdTime"], line["retries"], state])
 
-            if n is not None and i > n:
+            if n is not None and i + 1 >= n:
                 break
 
         tab.border = False
