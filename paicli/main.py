@@ -33,6 +33,7 @@ def main():
 
 @click.command("config", help="Initialize your config information in $HOME/.paicli")
 def configcmd():
+    load_config()
     config.initialize()
 
 

@@ -40,16 +40,16 @@ class Config(object):
 
     def load(self):
         self.load_config()
-        self.load_access_token()
+        # self.load_access_token()
 
     def initialize(self):
         print("-" * 60)
         print("Initialize config file: '$HOME/.paicli/config.yaml'")
         print("-" * 60)
-        self.username = input("1. username:\n")
-        self.host = input("2. host: [default] 10.0.3.9\n") or "10.0.3.9"
-        self.port = input("3. port: port for web portal [default] 9286\n") or 9286
-        self.api_port = input("4. api_port: port for REST API [default] 9186\n") or 9186
+        self.host = input("2. host: [{}]\n".format(self.host)) or self.host
+        self.port = input("3. port: port for web portal [{}]\n".format(self.port)) or self.port
+        self.api_port = input("4. api_port: port for REST API [{}]\n".format(self.api_port)) or self.api_port
+        self.username = input("1. username [{}]:\n".format(self.username)) or self.username
         self.write_config()
 
         # initialize token
