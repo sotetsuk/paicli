@@ -29,10 +29,9 @@ class Config(object):
 
     def __init__(self, profile="default"):
         self.profile = profile
-        self.host = "10.0.3.9"
-        self._port = 'None'
-        self._api_port = 9186
-        self.username = "None"
+        self.host = "10.0.3.9"  # default
+        self.port = 9186  # default
+        self.username = "None"  # default
         self.access_token = ""
         self.api_version = "v1"
 
@@ -41,8 +40,7 @@ class Config(object):
 
     def add_profile(self):
         self.host = input("Host ip address for PAI [{}]: ".format(self.host)) or self.host
-        self.port = input("Port for web portal [{}]: ".format(self.port)) or self.port
-        self.api_port = input("Port for REST API [{}]: ".format(self.api_port)) or self.api_port
+        self.port = input("Port for REST API [{}]: ".format(self.port)) or self.port
         self.username = input("Your username [{}]: ".format(self.username)) or self.username
         self.write_config()
 
@@ -53,7 +51,7 @@ class Config(object):
 
         self.host = config[self.profile]["host"]
         self.port = config[self.profile]["port"]
-        self.api_port = config[self.profile]["api_port"]
+        self.port = config[self.profile]["api_port"]
         self.username = config[self.profile]["username"]
 
     def load_access_token(self):
@@ -67,8 +65,7 @@ class Config(object):
         profiles = {}
         new_config = {
             "host": str(self.host),
-            "port": int(self._port),
-            "api_port": int(self._api_port),
+            "api_port": int(self.port),
             "username": str(self.username),
         }
         try:
@@ -90,20 +87,12 @@ class Config(object):
 
     @property
     def port(self):
-        return self._port
+        return self.port
 
     @port.setter
-    def port(self, port):
-        self._port = int(port)
-
-    @property
-    def api_port(self):
-        return self._api_port
-
-    @api_port.setter
-    def api_port(self, api_port):
-        self._api_port = int(api_port)
+    def port(self, api_port):
+        self.port = int(api_port)
 
     @property
     def api_uri(self):
-        return "http://{}:{}".format(self.host, self.api_port)
+        return "http://{}:{}".format(self.host, self.port)
