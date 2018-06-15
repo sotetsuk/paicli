@@ -22,10 +22,7 @@ except NameError:
     FileNotFoundError = IOError
 
 
-config = Config()
-
-
-def load_config():
+def _load(config):
     try:
         config.load()
     except FileNotFoundError as e:
@@ -38,20 +35,26 @@ def main():
     pass
 
 
-@click.command("config", help="Initialize your config information in $HOME/.paicli")
-def configcmd():
+@click.command("config", help="Add a your configuration in $HOME/.paicli")
+@click.option("--profile", type=str, default="default", help="Add another profile configuration.")
+def configcmd(profile):
+    config = Config(profile)
     try:
-        config.initialize()
-    except requests.HTTPError as e:
-        print(colored("Failed to update access token.\n", "red"))
-        print(e)
-        exit(1)
+        config.load()
+    except FileNotFoundError as e:
+        pass  # No config file
+    except KeyError as e:
+        pass  # No same profile
+
+    config.add_profile()  # Anyway, add new profile or modify the profile
 
 
 @click.command("token", help="Update access token.")
 @click.option('--expiration', '-e', type=int, default=500000, help="Expiration time.")
-def tokencmd(expiration):
-    load_config()
+@click.option("--profile", type=str, default="default", help="Use a specified profile.")
+def tokencmd(expiration, profile):
+    config = Config(profile)
+    _load(config)
     api = API(config)
 
     try:
@@ -68,8 +71,10 @@ def tokencmd(expiration):
 @click.command(name="ssh", help="SSH into a running container in PAI.")
 @click.option('--jobname', '-j', type=str, default="")
 @click.option('--dryrun', '-d', is_flag=True)
-def sshcmd(jobname, dryrun):
-    load_config()
+@click.option("--profile", type=str, default="default", help="Use a specified profile.")
+def sshcmd(jobname, dryrun, profile):
+    config = Config(profile)
+    _load(config)
     api = API(config)
 
     if not jobname:
@@ -100,8 +105,10 @@ def sshcmd(jobname, dryrun):
 @click.option('--username', '-u', multiple=True)
 @click.option('--state', '-s', multiple=True)
 @click.option('-n', type=int, default=20)
-def jobscmd(username, state, n):
-    load_config()
+@click.option("--profile", type=str, default="default", help="Use a specified profile.")
+def jobscmd(username, state, n, profile):
+    config = Config(profile)
+    _load(config)
     api = API(config)
 
     jobs = Jobs(api)
@@ -117,8 +124,10 @@ def jobscmd(username, state, n):
 
 @click.command(name="submit", help="Submit your job into PAI.")
 @click.argument('job_config_json')
-def submitcmd(job_config_json):
-    load_config()
+@click.option("--profile", type=str, default="default", help="Use a specified profile.")
+def submitcmd(job_config_json, profile):
+    config = Config(profile)
+    _load(config)
     api = API(config)
 
     with open(job_config_json, 'r') as f:
@@ -162,14 +171,17 @@ def submitcmd(job_config_json):
 
 @click.command(name="stop", help="Stop a job in PAI.")
 @click.option('--jobname', '-j', type=str, default="")
-def stopcmd(jobname):
-    load_config()
+@click.option("--profile", type=str, default="default", help="Use a specified profile.")
+def stopcmd(jobname, profile):
+    config = Config(profile)
+    _load(config)
     api = API(config)
 
     if not jobname:
         jobs = Jobs(api, config.username)
         jobs.filter({'state': ['RUNNING']})
         jobname = select_job_interactively(jobs)
+
 
     try:
         api.put_jobs_jobname_executiontype(jobname, "STOP")
