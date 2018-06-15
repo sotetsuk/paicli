@@ -30,7 +30,7 @@ class Config(object):
     def __init__(self, profile="default"):
         self.profile = profile
         self.host = "10.0.3.9"  # default
-        self.port = 9186  # default
+        self._port = 9186  # default
         self.username = "None"  # default
         self.access_token = ""
         self.api_version = "v1"
@@ -51,7 +51,7 @@ class Config(object):
 
         self.host = config[self.profile]["host"]
         self.port = config[self.profile]["port"]
-        self.port = config[self.profile]["api_port"]
+        self.port = config[self.profile]["port"]
         self.username = config[self.profile]["username"]
 
     def load_access_token(self):
@@ -65,7 +65,7 @@ class Config(object):
         profiles = {}
         new_config = {
             "host": str(self.host),
-            "api_port": int(self.port),
+            "port": int(self.port),
             "username": str(self.username),
         }
         try:
@@ -87,11 +87,11 @@ class Config(object):
 
     @property
     def port(self):
-        return self.port
+        return self._port
 
     @port.setter
-    def port(self, api_port):
-        self.port = int(api_port)
+    def port(self, _port):
+        self._port = int(_port)
 
     @property
     def api_uri(self):
