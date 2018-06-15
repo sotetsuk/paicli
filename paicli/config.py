@@ -21,12 +21,11 @@ class Config(object):
     # consts
     _paicli_dirname = ".paicli"
     _configfile = "config.yaml"
-    _accesstoken = "access_token"
+    _accesstoken = ".token_{}"
 
     # paths
     path_to_configdir = os.path.join(os.environ['HOME'], _paicli_dirname)
     path_to_configfile = os.path.join(os.environ['HOME'], _paicli_dirname, _configfile)
-    path_to_accesstoken = os.path.join(os.environ['HOME'], _paicli_dirname, _accesstoken)
 
     def __init__(self, profile="default"):
         self.profile = profile
@@ -36,6 +35,9 @@ class Config(object):
         self.username = "None"
         self.access_token = ""
         self.api_version = "v1"
+
+        self.path_to_accesstoken = os.path.join(os.environ['HOME'],
+                                                self._paicli_dirname, self._accesstoken.format(self.profile))
 
     def add_profile(self):
         self.host = input("Host ip address for PAI [{}]: ".format(self.host)) or self.host
