@@ -9,10 +9,10 @@ clear:
 
 build:
 	python setup.py install
+	python setup.py sdist bdist_wheel
 
 test:
 	python -m unittest -v paicli/tests/*.py
 
 pypi:
-	python setup.py register
-	python setup.py sdist bdist bdist_egg upload
+	twine upload --repository-url https://upload.pypi.org/legacy dist/*
