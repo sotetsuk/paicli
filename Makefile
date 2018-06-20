@@ -12,3 +12,7 @@ build:
 
 test:
 	python -m unittest -v paicli/tests/*.py
+
+pypi:
+	python setup.py register
+	python setup.py sdist bdist bdist_egg upload
