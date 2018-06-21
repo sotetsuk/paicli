@@ -70,15 +70,18 @@ def tokencmd(expiration, profile):
 
 @click.command(name="ssh", help="SSH into a running container in PAI.")
 @click.option('--jobname', '-j', type=str, default="")
+@click.option('--username', '-u', type=str, default="")
 @click.option('--dryrun', '-d', is_flag=True)
 @click.option("--profile", type=str, default="default", help="Use a specified profile.")
-def sshcmd(jobname, dryrun, profile):
+def sshcmd(jobname, username, dryrun, profile):
     config = Config(profile)
     _load(config)
     api = API(config)
 
     if not jobname:
-        jobs = Jobs(api, config.username)
+        if not username:
+            username = config.username
+        jobs = Jobs(api, username)
         jobs.filter({'state': ['RUNNING']})
         if len(jobs) == 0:
             print("There is no running jobs.")
