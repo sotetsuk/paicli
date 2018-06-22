@@ -4,6 +4,7 @@ Author: Sotetsu KOYAMADA
 """
 from __future__ import print_function
 
+import sys
 import click
 import json
 import getpass
@@ -125,16 +126,22 @@ def jobscmd(username, state, n, profile):
     jobs.show(n)
 
 
-@click.command(name="submit", help="Submit your job into PAI.")
-@click.argument('job_config_json')
+@click.command(name="submit", help="Submit your job into PAI. No json files or '-', read standard input.")
+@click.argument('job_config_json', required=False)
 @click.option("--profile", type=str, default="default", help="Use a specified profile.")
 def submitcmd(job_config_json, profile):
     config = Config(profile)
     _load(config)
     api = API(config)
 
-    with open(job_config_json, 'r') as f:
-        job_config_json = ''.join([line.strip('\n').strip() for line in f.readlines()])
+    if job_config_json and job_config_json != '-':
+        with open(job_config_json, 'r') as f:
+            job_config_json = ''.join([line.strip('\n').strip() for line in f.readlines()])
+    else:
+        stdin_json = ""
+        for line in sys.stdin:
+            stdin_json += line.strip('\n').strip()
+        job_config_json = stdin_json
 
     try:
         api.post_jobs(job_config_json)
