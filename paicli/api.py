@@ -54,7 +54,13 @@ class API(object):
             res.raise_for_status()
 
     def get_jobs_jobname(self, jobname):
-        pass
+        url = "{}/api/{}/jobs/{}".format(self.config.api_uri, self.config.api_version, jobname)
+        res = requests.get(url)
+
+        if res.ok:
+            return res.content
+        else:
+            res.raise_for_status()
 
     def post_jobs(self, job_config_json):
         url = "{}/api/{}/jobs".format(self.config.api_uri, self.config.api_version)

@@ -10,6 +10,7 @@ import json
 import getpass
 from termcolor import colored
 import requests
+from prettytable import PrettyTable
 
 from .config import Config
 from .jobs import Jobs
@@ -218,12 +219,57 @@ def stopcmd(jobname, profile):
         exit(1)
 
 
+@click.command(name="host", help="Show host information of a job.")
+@click.argument('jobname', type=str)
+@click.option("--profile", type=str, default="default", help="Use a specified profile.")
+def hostcmd(jobname, profile):
+    config = Config(profile)
+    _load(config)
+    api = API(config)
+
+    tab = PrettyTable()
+    tab.field_names = ["task role", "ip", "port label", "port"]
+
+    try:
+        ret = api.get_jobs_jobname(jobname)
+        tasks = json.loads(ret)['taskRoles']
+        for k, v in tasks.items():
+            task_name = k
+            tasks_statuses = v['taskStatuses']
+            for task_status in tasks_statuses:
+                container_ip = task_status['containerIp']
+                container_ports = task_status['containerPorts']
+                for port_label, port in container_ports.items():
+                   tab.add_row([task_name, container_ip, port_label, port])
+
+        tab.border = False
+        print(tab.get_string())
+
+    except requests.HTTPError as e:
+        print(colored("Failed to get a host information.\n", "red"))
+        print(e)
+        exit(1)
+    except requests.Timeout as e:
+        print(colored("Failed to get a host information.\n", "red"))
+        print(e)
+        exit(1)
+    except requests.ConnectionError as e:
+        print(colored("Failed to get a host information.\n", "red"))
+        print(e)
+        exit(1)
+    except requests.RequestException as e:
+        print(colored("Failed to get a host information.\n", "red"))
+        print(e)
+        exit(1)
+
+
 main.add_command(configcmd)
 main.add_command(tokencmd)
 main.add_command(sshcmd)
 main.add_command(jobscmd)
 main.add_command(submitcmd)
 main.add_command(stopcmd)
+main.add_command(hostcmd)
 
 
 if __name__ == '__main__':
