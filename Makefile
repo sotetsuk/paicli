@@ -15,4 +15,4 @@ test:
 	python -m unittest -v paicli/tests/*.py
 
 pypi:
-	twine upload --repository-url https://upload.pypi.org/legacy dist/*
+	python -m twine upload --repository-url https://upload.pypi.org/legacy/ dist/*
