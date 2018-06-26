@@ -78,7 +78,7 @@ class Config(object):
             profiles[self.profile] = new_config
 
         with codecs.open(self.path_to_configfile, 'w', 'utf-8') as f:
-            f.writelines(yaml.dump(profiles, default_flow_style=False))
+            f.writelines(yaml.safe_dump(profiles, default_flow_style=False))
 
     def write_access_token(self):
         if not os.path.exists(self.path_to_configdir):
