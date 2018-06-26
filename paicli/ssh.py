@@ -7,12 +7,14 @@ from __future__ import print_function
 import os
 import requests
 import subprocess
+import codecs
+from .utils import to_str
 
 
 def download_sshkey(content):
     res = requests.get(content['keyPair']['privateKeyDirectDownloadLink'])
     sshkey = res.content
-    return sshkey
+    return to_str(sshkey)
 
 
 def run_ssh(config, content, sshkey, dryrun=False):
@@ -23,8 +25,7 @@ def run_ssh(config, content, sshkey, dryrun=False):
     if os.path.exists(path_to_sshkey):
         os.remove(path_to_sshkey)
 
-    with open(path_to_sshkey, 'w') as f:
-        sshkey = sshkey.decode('utf-8')
+    with codecs.open(path_to_sshkey, 'w', 'utf-8') as f:
         f.writelines(sshkey)
     os.chmod(path_to_sshkey, 0o600)
 

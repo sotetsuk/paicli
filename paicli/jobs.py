@@ -7,7 +7,7 @@ from datetime import datetime
 import json
 from prettytable import PrettyTable
 from termcolor import colored
-
+from .utils import to_str
 
 class Jobs(object):
 
@@ -63,5 +63,4 @@ class Jobs(object):
                 break
 
         tab.border = False
-        print(tab.get_string())
-
+        print(to_str(tab.get_string()))
