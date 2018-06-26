@@ -3,9 +3,9 @@
 Author: Sotetsu KOYAMADA
 """
 from __future__ import print_function
-
 import sys
 import click
+import logging
 import json
 import getpass
 from termcolor import colored
@@ -17,6 +17,7 @@ from .jobs import Jobs
 from .ssh import download_sshkey, run_ssh
 from .intereactive import select_job_interactively
 from .api import API
+from .utils import to_str
 
 try:
     FileNotFoundError
@@ -60,7 +61,8 @@ def tokencmd(expiration, profile):
     api = API(config)
 
     try:
-        ret = api.post_token(config.username, getpass.getpass("Enter password:\n"), expiration)
+        passwd = to_str(getpass.getpass("Enter password:\n"))
+        ret = api.post_token(config.username, passwd, expiration)
         token = json.loads(ret)['token']
         config.access_token = token
         config.write_access_token()
@@ -274,4 +276,7 @@ main.add_command(hostcmd)
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO,
+                        format='[%(asctime)s] %(module)s.%(funcName)s %(levelname)s \t: %(message)s')
+    logging.debug("Program start.")
     main()

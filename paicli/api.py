@@ -4,6 +4,7 @@ Author: Sotetsu KOYAMADA
 """
 import json
 import requests
+from .utils import to_str
 
 
 class API(object):
@@ -27,7 +28,7 @@ class API(object):
         res = requests.post(url, headers=headers, data=data)
 
         if res.ok:
-            return res.content
+            return to_str(res.content)
         else:
             res.raise_for_status()
 
@@ -49,7 +50,7 @@ class API(object):
         res = requests.get(url=url, params=params)
 
         if res.ok:
-            return res.content
+            return to_str(res.content)
         else:
             res.raise_for_status()
 
@@ -58,7 +59,7 @@ class API(object):
         res = requests.get(url)
 
         if res.ok:
-            return res.content
+            return to_str(res.content)
         else:
             res.raise_for_status()
 
@@ -69,7 +70,7 @@ class API(object):
         res = requests.post(url, headers=headers, data=job_config_json)
 
         if res.ok:
-            return res.content
+            return to_str(res.content)
         else:
             res.raise_for_status()
 
@@ -81,7 +82,7 @@ class API(object):
         res = requests.get(url)
 
         if res.ok:
-            return res.content
+            return to_str(res.content)
         else:
             res.raise_for_status()
 
@@ -92,7 +93,7 @@ class API(object):
 
         res = requests.put(url, headers=headers, data=data)
         if res.ok:
-            return res.content
+            return to_str(res.content)
         else:
             res.raise_for_status()
 
