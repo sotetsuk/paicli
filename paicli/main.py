@@ -127,7 +127,8 @@ def jobscmd(username, state, n, profile):
     jobs.show(n)
 
 
-@click.command(name="submit", help="Submit your job into PAI. No json files or '-', read standard input.")
+@click.command(name="submit",
+               help="Submit your job into PAI. With no json files, or when '-' is specified, read standard input.")
 @click.argument('job_config_json', required=False)
 @click.option("--profile", type=str, default="default", help="Use a specified profile.")
 def submitcmd(job_config_json, profile):
