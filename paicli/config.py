@@ -17,6 +17,8 @@ try:
 except NameError:
     FileNotFoundError = IOError
 
+HOME = os.path.expanduser("~")
+
 
 class Config(object):
 
@@ -26,8 +28,8 @@ class Config(object):
     _accesstoken = ".token_{}"
 
     # paths
-    path_to_configdir = os.path.join(os.environ['HOME'], _paicli_dirname)
-    path_to_configfile = os.path.join(os.environ['HOME'], _paicli_dirname, _configfile)
+    path_to_configdir = os.path.join(HOME, _paicli_dirname)
+    path_to_configfile = os.path.join(HOME, _paicli_dirname, _configfile)
 
     def __init__(self, profile="default"):
         self.profile = to_str(profile)
@@ -37,7 +39,7 @@ class Config(object):
         self.access_token = to_str("")
         self.api_version = to_str("v1")
 
-        self.path_to_accesstoken = os.path.join(os.environ['HOME'],
+        self.path_to_accesstoken = os.path.join(HOME,
                                                 self._paicli_dirname, self._accesstoken.format(self.profile))
 
     def add_profile(self):
