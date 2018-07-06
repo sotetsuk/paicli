@@ -24,6 +24,10 @@ try:
 except NameError:
     FileNotFoundError = IOError
 
+if sys.platform.lower()[:3] == "win":
+    import colorama
+    colorama.init()
+
 
 def _load(config):
     try:

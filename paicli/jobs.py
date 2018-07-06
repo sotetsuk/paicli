@@ -3,11 +3,17 @@
 Author: Sotetsu KOYAMADA
 """
 from __future__ import division
+import sys
 from datetime import datetime
 import json
 from prettytable import PrettyTable
 from termcolor import colored
 from .utils import to_str
+
+if sys.platform.lower()[:3] == "win":
+    import colorama
+    colorama.init()
+
 
 class Jobs(object):
 

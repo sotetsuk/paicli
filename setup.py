@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='paicli',
-    version="0.3.2",
+    version="0.3.4",
     description='Client for PAI',
     author='Sotetsu KOYAMADA',
     url='',
@@ -13,6 +13,7 @@ setup(
                       "prompt_toolkit==1.0.9",
                       "prettytable",
                       "termcolor",
+                      "colorama",
                       "click",
                       ],
     packages=find_packages(),
