@@ -78,11 +78,13 @@ def tokencmd(expiration, profile):
 
 @click.command(name="ssh", help="SSH into a running container in PAI.")
 @click.argument('jobname', type=str, default="")
+@click.option('--task-name', '-t', type=str, default="")
+@click.option('--task-index', '-i', type=int, default=-1)
 @click.option('--username', '-u', type=str, default="")
 @click.option('--command', '-c', type=str, default="")
 @click.option('--dryrun', '-d', is_flag=True)
 @click.option("--profile", type=str, default="default", help="Use a specified profile.")
-def sshcmd(jobname, username, command, dryrun, profile):
+def sshcmd(jobname, task_name, task_index, username, command, dryrun, profile):
     config = Config(profile)
     _load(config)
     api = API(config)
@@ -96,21 +98,30 @@ def sshcmd(jobname, username, command, dryrun, profile):
             print("There is no running jobs.")
             exit(1)
         choices = [job['name'] for job in jobs]
-        jobname = select_choices_interactively(choices)
+        _jobname = select_choices_interactively(choices)
+    else:
+        _jobname = jobname
 
     content = None
     try:
-        content = json.loads(api.get_jobs_jobname_ssh(jobname))
+        content = json.loads(api.get_jobs_jobname_ssh(_jobname))
     except requests.HTTPError as e:
         status_code = e.response.status_code
         if status_code == 404:
             print(colored("SSH failed.", "red"))
-            print("It seems that SSH is not ready yet. Wait a minute and try again.\n")
-
+            if jobname:
+                print("Wrong job name or SSH is not ready yet.\n")
+            else:
+                print("SSH is not ready yet. Wait a minute and try again.\n")
         print(e)
         exit(1)
 
-    run_ssh(api, jobname, config, content, command, dryrun)
+    try:
+        run_ssh(api, _jobname, task_name, task_index, config, content, command, dryrun)
+    except KeyError:  # TODO: raise/catch original error
+        print(colored("SSH failed.", "red"))
+        print("There is no match task.\n")  # TODO: give more information
+        exit(1)
 
 
 @click.command(name="jobs", help="Show jobs in PAI.")
