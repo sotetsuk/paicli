@@ -22,22 +22,19 @@ from prompt_toolkit.styles import style_from_dict
 # https://github.com/jonathanslenders/python-prompt-toolkit/pull/427/commits/2b75d1835eee49c8881c1d8d7e107237227eda95#diff-a4228333fe0e9eca1e3149e15ae2d8de
 #
 
-string_query = ' Command Select '
-inst = 'Choose the job'
 
-
-def select_job_interactively(job_content):
-    choices = [job['name'] for job in job_content]
+def select_choices_interactively(choices):
+    # choices = [job['name'] for job in job_content]
     app = get_app(choices)
 
     eventloop = create_eventloop()
     try:
         cli = CommandLineInterface(application=app, eventloop=eventloop)
-        selected_job = cli.run(reset_current_buffer=False)
+        selected_choice = cli.run(reset_current_buffer=False)
     finally:
         eventloop.close()
 
-    return selected_job
+    return selected_choice
 
 
 def get_app(choices):
