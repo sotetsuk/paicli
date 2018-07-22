@@ -77,7 +77,7 @@ def tokencmd(expiration, profile):
 
 
 @click.command(name="ssh", help="SSH into a running container in PAI.")
-@click.option('--jobname', '-j', type=str, default="")
+@click.argument('jobname', type=str, default="")
 @click.option('--username', '-u', type=str, default="")
 @click.option('--command', '-c', type=str, default="")
 @click.option('--dryrun', '-d', is_flag=True)
@@ -189,7 +189,7 @@ def submitcmd(job_config_json, profile):
 
 
 @click.command(name="stop", help="Stop a job in PAI.")
-@click.option('--jobname', '-j', type=str, default="")
+@click.argument('jobname', type=str, default="")
 @click.option("--profile", type=str, default="default", help="Use a specified profile.")
 def stopcmd(jobname, profile):
     config = Config(profile)
