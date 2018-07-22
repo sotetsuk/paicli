@@ -79,9 +79,10 @@ def tokencmd(expiration, profile):
 @click.command(name="ssh", help="SSH into a running container in PAI.")
 @click.option('--jobname', '-j', type=str, default="")
 @click.option('--username', '-u', type=str, default="")
+@click.option('--command', '-c', type=str, default="")
 @click.option('--dryrun', '-d', is_flag=True)
 @click.option("--profile", type=str, default="default", help="Use a specified profile.")
-def sshcmd(jobname, username, dryrun, profile):
+def sshcmd(jobname, username, command, dryrun, profile):
     config = Config(profile)
     _load(config)
     api = API(config)
@@ -109,7 +110,7 @@ def sshcmd(jobname, username, dryrun, profile):
         print(e)
         exit(1)
 
-    run_ssh(api, jobname, config, content, dryrun)
+    run_ssh(api, jobname, config, content, command, dryrun)
 
 
 @click.command(name="jobs", help="Show jobs in PAI.")
