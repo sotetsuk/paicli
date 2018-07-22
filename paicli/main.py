@@ -200,7 +200,7 @@ def submitcmd(job_config_json, profile):
 
 
 @click.command(name="stop", help="Stop a job in PAI.")
-@click.argument('jobname', type=str, default="")
+@click.argument('jobname', type=str, nargs=-1)
 @click.option("--profile", type=str, default="default", help="Use a specified profile.")
 def stopcmd(jobname, profile):
     config = Config(profile)
@@ -211,32 +211,32 @@ def stopcmd(jobname, profile):
         jobs = Jobs(api, config.username)
         jobs.filter({'state': ['RUNNING']})
         choices = [job['name'] for job in jobs]
-        jobname = select_choices_interactively(choices)
+        jobname = (select_choices_interactively(choices), )
 
-
-    try:
-        api.put_jobs_jobname_executiontype(jobname, "STOP")
-        print(colored("Stop signal submitted!", "green") + ": {}".format(jobname))
-    except requests.HTTPError as e:
-        print(colored("Failed to submit a stop signal.\n", "red"))
-        print(e)
-        exit(1)
-    except requests.Timeout as e:
-        print(colored("Failed to submit a stop signal.\n", "red"))
-        print(e)
-        exit(1)
-    except requests.ConnectionError as e:
-        print(colored("Failed to submit a stop signal.\n", "red"))
-        print(e)
-        exit(1)
-    except requests.RequestException as e:
-        print(colored("Failed to submit a stop signal.\n", "red"))
-        print(e)
-        exit(1)
-    except FileNotFoundError:
-        print(colored("Failed to submit a stop signal.\n", "red"))
-        print("Access token does not exist. Run 'paicli token'")
-        exit(1)
+    for _jobname in jobname:
+        try:
+            api.put_jobs_jobname_executiontype(_jobname, "STOP")
+            print(colored("Stop signal submitted!", "green") + ": {}".format(_jobname))
+        except requests.HTTPError as e:
+            print(colored("Failed to submit a stop signal.\n", "red"))
+            print(e)
+            exit(1)
+        except requests.Timeout as e:
+            print(colored("Failed to submit a stop signal.\n", "red"))
+            print(e)
+            exit(1)
+        except requests.ConnectionError as e:
+            print(colored("Failed to submit a stop signal.\n", "red"))
+            print(e)
+            exit(1)
+        except requests.RequestException as e:
+            print(colored("Failed to submit a stop signal.\n", "red"))
+            print(e)
+            exit(1)
+        except FileNotFoundError:
+            print(colored("Failed to submit a stop signal.\n", "red"))
+            print("Access token does not exist. Run 'paicli token'")
+            exit(1)
 
 
 @click.command(name="host", help="Show host information of a job.")
