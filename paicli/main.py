@@ -198,7 +198,8 @@ def stopcmd(jobname, profile):
     if not jobname:
         jobs = Jobs(api, config.username)
         jobs.filter({'state': ['RUNNING']})
-        jobname = select_choices_interactively(jobs)
+        choices = [job['name'] for job in jobs]
+        jobname = select_choices_interactively(choices)
 
 
     try:
