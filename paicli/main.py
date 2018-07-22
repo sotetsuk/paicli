@@ -14,8 +14,8 @@ from prettytable import PrettyTable
 
 from .config import Config
 from .jobs import Jobs
-from .ssh import download_sshkey, run_ssh
-from .intereactive import select_job_interactively
+from .ssh import run_ssh
+from .intereactive import select_choices_interactively
 from .api import API
 from .utils import to_str
 
@@ -94,7 +94,8 @@ def sshcmd(jobname, username, dryrun, profile):
         if len(jobs) == 0:
             print("There is no running jobs.")
             exit(1)
-        jobname = select_job_interactively(jobs)
+        choices = [job['name'] for job in jobs]
+        jobname = select_choices_interactively(choices)
 
     content = None
     try:
@@ -108,8 +109,7 @@ def sshcmd(jobname, username, dryrun, profile):
         print(e)
         exit(1)
 
-    sshkey = download_sshkey(content)
-    run_ssh(config, content, sshkey, dryrun)
+    run_ssh(api, jobname, config, content, dryrun)
 
 
 @click.command(name="jobs", help="Show jobs in PAI.")
@@ -198,7 +198,7 @@ def stopcmd(jobname, profile):
     if not jobname:
         jobs = Jobs(api, config.username)
         jobs.filter({'state': ['RUNNING']})
-        jobname = select_job_interactively(jobs)
+        jobname = select_choices_interactively(jobs)
 
 
     try:
@@ -247,7 +247,7 @@ def hostcmd(jobname, profile):
                 container_ip = task_status['containerIp']
                 container_ports = task_status['containerPorts']
                 for port_label, port in container_ports.items():
-                   tab.add_row([task_name, container_ip, port_label, port])
+                    tab.add_row([task_name, container_ip, port_label, port])
 
         tab.border = False
         print(tab.get_string())
