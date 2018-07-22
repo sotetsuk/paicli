@@ -13,7 +13,7 @@ from .utils import to_str
 from .intereactive import select_choices_interactively
 
 
-def run_ssh(api, jobname, config, content, dryrun=False):
+def run_ssh(api, jobname, config, content, command="", dryrun=False):
     sshkey = _download_sshkey(content)
     path_to_sshkey = os.path.join(config.path_to_configdir, ".tmpkey")
 
@@ -53,6 +53,8 @@ def run_ssh(api, jobname, config, content, dryrun=False):
     os.chmod(path_to_sshkey, 0o600)
 
     cmd = ["ssh", "-i", path_to_sshkey, "-p", port, "-oStrictHostKeyChecking=no", "root@{}".format(host)]
+    if command:
+        cmd.append(command)
 
     if dryrun:
         print(' '.join(cmd))
