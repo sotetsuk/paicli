@@ -147,56 +147,58 @@ def jobscmd(username, state, n, profile):
 
 @click.command(name="submit",
                help="Submit your job into PAI. With no json files, or when '-' is specified, read standard input.")
-@click.argument('job_config_json', required=False)
+@click.argument('job_config_json', nargs=-1, required=False)
 @click.option("--profile", type=str, default="default", help="Use a specified profile.")
 def submitcmd(job_config_json, profile):
     config = Config(profile)
     _load(config)
     api = API(config)
 
-    if job_config_json and job_config_json != '-':
-        with open(job_config_json, 'r') as f:
-            job_config_json = ''.join([line.strip('\n').strip() for line in f.readlines()])
+    job_config_json_list = []
+    if job_config_json and job_config_json[0] != '-':
+        for _job_config_json in job_config_json:
+            with open(_job_config_json, 'r') as f:
+                job_config_json_list.append(''.join([line.strip('\n').strip() for line in f.readlines()]))
     else:
         stdin_json = ""
         for line in sys.stdin:
             stdin_json += line.strip('\n').strip()
-        job_config_json = stdin_json
+        job_config_json_list.append(stdin_json)
 
-    try:
-        api.post_jobs(job_config_json)
-        print(colored("Successfully submitted!", "green") + ": {}"
-              .format(json.loads(job_config_json)['jobName']))
-    except requests.HTTPError as e:
-        status_code = e.response.status_code
-        if status_code == 401:
-            print(colored("Submission failed.", "red"))
-            print("Access token seems to be expired.")
-            print("Update your token by 'paicli token', then try again.\n")
-        elif status_code == 400:
-            print(colored("Submission failed.", "red"))
-            print("This may be caused by duplicated submission.\n")
-        else:
+    for _job_config_json in job_config_json_list:
+        try:
+            api.post_jobs(_job_config_json)
+            print(colored("Successfully submitted!", "green") + ": {}"
+                  .format(json.loads(_job_config_json)['jobName']))
+        except requests.HTTPError as e:
+            status_code = e.response.status_code
+            if status_code == 401:
+                print(colored("Submission failed.", "red"))
+                print("Access token seems to be expired.")
+                print("Update your token by 'paicli token', then try again.\n")
+            elif status_code == 400:
+                print(colored("Submission failed.", "red"))
+                print("This may be caused by duplicated submission.\n")
+            else:
+                print(colored("Submission failed.\n", "red"))
+            print(e)
+            exit(1)
+        except requests.Timeout as e:
             print(colored("Submission failed.\n", "red"))
-
-        print(e)
-        exit(1)
-    except requests.Timeout as e:
-        print(colored("Submission failed.\n", "red"))
-        print(e)
-        exit(1)
-    except requests.ConnectionError as e:
-        print(colored("Submission failed.\n", "red"))
-        print(e)
-        exit(1)
-    except requests.RequestException as e:
-        print(colored("Submission failed.\n", "red"))
-        print(e)
-        exit(1)
-    except FileNotFoundError as e:
-        print(colored("Submission failed.\n", "red"))
-        print("Access token does not exist. Run 'paicli token'")
-        exit(1)
+            print(e)
+            exit(1)
+        except requests.ConnectionError as e:
+            print(colored("Submission failed.\n", "red"))
+            print(e)
+            exit(1)
+        except requests.RequestException as e:
+            print(colored("Submission failed.\n", "red"))
+            print(e)
+            exit(1)
+        except FileNotFoundError as e:
+            print(colored("Submission failed.\n", "red"))
+            print("Access token does not exist. Run 'paicli token'")
+            exit(1)
 
 
 @click.command(name="stop", help="Stop a job in PAI.")
