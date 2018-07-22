@@ -52,7 +52,7 @@ def run_ssh(api, jobname, config, content, dryrun=False):
         f.writelines(sshkey)
     os.chmod(path_to_sshkey, 0o600)
 
-    cmd = ["ssh", "-i", path_to_sshkey, "-p", port, "root@{}".format(host)]
+    cmd = ["ssh", "-i", path_to_sshkey, "-p", port, "-oStrictHostKeyChecking=no", "root@{}".format(host)]
 
     if dryrun:
         print(' '.join(cmd))
