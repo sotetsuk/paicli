@@ -35,9 +35,11 @@ class Config(object):
         self.profile = to_str(profile)
         self.host = to_str("10.0.3.9")  # default
         self._port = 9186  # default
-        self.username = to_str("None")  # default
+        self.username = to_str("")  # default
+        self.password = to_str("")  # default
         self.access_token = to_str("")
         self.api_version = to_str("v1")
+
 
         self.path_to_accesstoken = os.path.join(HOME,
                                                 self._paicli_dirname, self._accesstoken.format(self.profile))
@@ -46,6 +48,7 @@ class Config(object):
         self.host = to_str(input("Host ip address for PAI [{}]: ".format(self.host)) or self.host)
         self.port = input("Port for REST API [{}]: ".format(self.port)) or self.port
         self.username = to_str(input("Your username [{}]: ".format(self.username)) or self.username)
+        self.password = to_str(input("Your password (optional) [{}]: ".format(self.password)) or self.password)
         self.write_config()
 
     def load(self):
@@ -57,6 +60,7 @@ class Config(object):
         self.port = config[self.profile]["port"]
         self.port = config[self.profile]["port"]
         self.username = config[self.profile]["username"]
+        self.password = config[self.profile]["password"]
 
     def load_access_token(self):
         with codecs.open(self.path_to_accesstoken, 'r', 'utf-8') as f:
@@ -71,6 +75,7 @@ class Config(object):
             "host": to_str(self.host),
             "port": self.port,
             "username": to_str(self.username),
+            "password": to_str(self.password),
         }
         try:
             with codecs.open(self.path_to_configfile, 'r', 'utf-8') as f:
