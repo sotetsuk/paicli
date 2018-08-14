@@ -7,7 +7,6 @@ import sys
 import click
 import logging
 import json
-import getpass
 from termcolor import colored
 import requests
 from prettytable import PrettyTable
@@ -17,7 +16,8 @@ from .jobs import Jobs
 from .ssh import run_ssh
 from .intereactive import select_choices_interactively
 from .api import API
-from .utils import to_str
+from .cmd import token
+
 
 try:
     FileNotFoundError
@@ -65,11 +65,7 @@ def tokencmd(expiration, profile):
     api = API(config)
 
     try:
-        passwd = to_str(getpass.getpass("Enter password:\n"))
-        ret = api.post_token(config.username, passwd, expiration)
-        token = json.loads(ret)['token']
-        config.access_token = token
-        config.write_access_token()
+        token(api, expiration)
     except requests.HTTPError as e:
         print(colored("Failed to update access token.\n", "red"))
         print(e)
