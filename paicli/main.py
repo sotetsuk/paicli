@@ -100,17 +100,22 @@ def sshcmd(jobname, task_name, task_index, username, command, dryrun, profile):
 
     content = None
     try:
-        content = json.loads(api.get_jobs_jobname_ssh(_jobname))
+        content = json.loads(api.get_user_username_jobs_jobname_ssh(username, _jobname))
     except requests.HTTPError as e:
-        status_code = e.response.status_code
-        if status_code == 404:
-            print(colored("SSH failed.", "red"))
-            if jobname:
-                print("Wrong job name or SSH is not ready yet.\n")
-            else:
-                print("SSH is not ready yet. Wait a minute and try again.\n")
-        print(e)
-        exit(1)
+        # This method is duplicated in the latest API
+        # So this nested try-catch should be removed in the near future
+        try:
+            content = json.loads(api.get_jobs_jobname_ssh(_jobname))
+        except requests.HTTPError as e:
+            status_code = e.response.status_code
+            if status_code == 404:
+                print(colored("SSH failed.", "red"))
+                if jobname:
+                    print("Wrong job name or SSH is not ready yet.\n")
+                else:
+                    print("SSH is not ready yet. Wait a minute and try again.\n")
+            print(e)
+            exit(1)
 
     try:
         run_ssh(api, _jobname, task_name, task_index, config, content, command, dryrun)
