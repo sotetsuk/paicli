@@ -112,7 +112,21 @@ class API(object):
             res.raise_for_status()
 
     def put_jobs_jobname_executiontype(self, jobname, value):
+        """NOTE: DEPRECATED."""
         url = "{}/api/{}/jobs/{}/executionType".format(self.config.api_uri, self.config.api_version, jobname)
+        headers = self._headers_with_auth()
+        data = json.dumps({"value": value})
+
+        res = requests.put(url, headers=headers, data=data)
+        if res.ok:
+            return to_str(res.content)
+        else:
+            res.raise_for_status()
+
+    def put_user_username_jobs_jobname_executiontype(self, username, jobname, value):
+        url = "{}/api/{}/user/{}/jobs/{}/executionType".format(
+            self.config.api_uri, self.config.api_version, username, jobname
+        )
         headers = self._headers_with_auth()
         data = json.dumps({"value": value})
 

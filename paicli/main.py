@@ -218,7 +218,7 @@ def stopcmd(jobname, profile):
 
     for _jobname in jobname:
         try:
-            api.put_jobs_jobname_executiontype(_jobname, "STOP")
+            api.put_user_username_jobs_jobname_executiontype(config.username, _jobname, "STOP")
             print(colored("Stop signal submitted!", "green") + ": {}".format(_jobname))
         except requests.HTTPError as e:
             print(colored("Failed to submit a stop signal.\n", "red"))
