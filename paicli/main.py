@@ -168,7 +168,7 @@ def submitcmd(job_config_json, profile):
 
     for _job_config_json in job_config_json_list:
         try:
-            api.post_jobs(_job_config_json)
+            api.post_user_username_jobs(config.username, _job_config_json)
             print(colored("Successfully submitted!", "green") + ": {}"
                   .format(json.loads(_job_config_json)['jobName']))
         except requests.HTTPError as e:

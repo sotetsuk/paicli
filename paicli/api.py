@@ -64,6 +64,7 @@ class API(object):
             res.raise_for_status()
 
     def post_jobs(self, job_config_json):
+        """NOTE: DEPRECATED. Use post_user_username_jobs"""
         url = "{}/api/{}/jobs".format(self.config.api_uri, self.config.api_version)
         headers = self._headers_with_auth()
 
@@ -84,6 +85,17 @@ class API(object):
         #
         url = "{}/api/{}/jobs/{}/ssh".format(self.config.api_uri, self.config.api_version, jobname)
         res = requests.get(url)
+
+        if res.ok:
+            return to_str(res.content)
+        else:
+            res.raise_for_status()
+
+    def post_user_username_jobs(self, username, job_config_json):
+        url = "{}/api/{}/user/{}/jobs".format(self.config.api_uri, self.config.api_version, username)
+        headers = self._headers_with_auth()
+
+        res = requests.post(url, headers=headers, data=job_config_json)
 
         if res.ok:
             return to_str(res.content)
