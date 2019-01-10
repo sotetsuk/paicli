@@ -105,7 +105,7 @@ def sshcmd(jobname, task_name, task_index, username, command, dryrun, profile):
         # This method is duplicated in the latest API
         # So this nested try-catch should be removed in the near future
         try:
-            content = json.loads(api.get_jobs_jobname_ssh(_jobname))
+            content = json.loads(api.get_user_username_jobs_jobname_ssh(config.username, _jobname))
         except requests.HTTPError as e:
             status_code = e.response.status_code
             if status_code == 404:
@@ -296,7 +296,7 @@ main.add_command(hostcmd)
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO,
+    logging.basicConfig(level=logging.DEBUG,
                         format='[%(asctime)s] %(module)s.%(funcName)s %(levelname)s \t: %(message)s')
     logging.debug("Program start.")
     main()

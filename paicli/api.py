@@ -91,6 +91,17 @@ class API(object):
         else:
             res.raise_for_status()
 
+    def get_user_username_jobs_jobname_ssh(self, username, jobname):
+        url = "{}/api/{}/user/{}/jobs/{}/ssh".format(
+            self.config.api_uri, self.config.api_version, username, jobname
+        )
+        res = requests.get(url)
+
+        if res.ok:
+            return to_str(res.content)
+        else:
+            res.raise_for_status()
+
     def post_user_username_jobs(self, username, job_config_json):
         url = "{}/api/{}/user/{}/jobs".format(self.config.api_uri, self.config.api_version, username)
         headers = self._headers_with_auth()
