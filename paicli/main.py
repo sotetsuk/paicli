@@ -42,8 +42,8 @@ def main():
     pass
 
 
-@click.command("config", help="Add a your configuration in $HOME/.paicli")
-@click.option("--profile", type=str, default="default", help="Add another profile configuration.")
+@click.command('config', help="Add a your configuration in $HOME/.paicli")
+@click.option('--profile', '-p', type=str, default='default', help="Add another profile configuration.")
 def configcmd(profile):
     config = Config(profile)
     try:
@@ -56,9 +56,9 @@ def configcmd(profile):
     config.add_profile()  # Anyway, add new profile or modify the profile
 
 
-@click.command("token", help="Update access token.")
+@click.command('token', help="Update access token.")
 @click.option('--expiration', '-e', type=int, default=500000, help="Expiration time.")
-@click.option("--profile", type=str, default="default", help="Use a specified profile.")
+@click.option('--profile', '-p', type=str, default='default', help="Use a specified profile.")
 def tokencmd(expiration, profile):
     config = Config(profile)
     _load(config)
@@ -72,14 +72,14 @@ def tokencmd(expiration, profile):
         exit(1)
 
 
-@click.command(name="ssh", help="SSH into a running container in PAI.")
-@click.argument('jobname', type=str, default="")
-@click.option('--task-name', '-t', type=str, default="")
+@click.command(name='ssh', help="SSH into a running container in PAI.")
+@click.argument('jobname', type=str, default='')
+@click.option('--task-name', '-t', type=str, default='')
 @click.option('--task-index', '-i', type=int, default=-1)
-@click.option('--username', '-u', type=str, default="")
-@click.option('--command', '-c', type=str, default="")
+@click.option('--username', '-u', type=str, default='')
+@click.option('--command', '-c', type=str, default='')
 @click.option('--dryrun', '-d', is_flag=True)
-@click.option("--profile", type=str, default="default", help="Use a specified profile.")
+@click.option('--profile', '-p', type=str, default='default', help="Use a specified profile.")
 def sshcmd(jobname, task_name, task_index, username, command, dryrun, profile):
     config = Config(profile)
     _load(config)
@@ -125,11 +125,11 @@ def sshcmd(jobname, task_name, task_index, username, command, dryrun, profile):
         exit(1)
 
 
-@click.command(name="jobs", help="Show jobs in PAI.")
+@click.command(name='jobs', help="Show jobs in PAI.")
 @click.option('--username', '-u', multiple=True)
 @click.option('--state', '-s', multiple=True)
-@click.option('-n', type=int, default=20)
-@click.option("--profile", type=str, default="default", help="Use a specified profile.")
+@click.option('--num-jobs', '-n', type=int, default=20)
+@click.option('--profile', '-p', type=str, default='default', help="Use a specified profile.")
 def jobscmd(username, state, n, profile):
     config = Config(profile)
     _load(config)
@@ -146,10 +146,10 @@ def jobscmd(username, state, n, profile):
     jobs.show(n)
 
 
-@click.command(name="submit",
+@click.command(name='submit',
                help="Submit your job into PAI. With no json files, or when '-' is specified, read standard input.")
 @click.argument('job_config_json', nargs=-1, required=False)
-@click.option("--profile", type=str, default="default", help="Use a specified profile.")
+@click.option('--profile', '-p', type=str, default='default', help="Use a specified profile.")
 def submitcmd(job_config_json, profile):
     config = Config(profile)
     _load(config)
@@ -202,9 +202,9 @@ def submitcmd(job_config_json, profile):
             exit(1)
 
 
-@click.command(name="stop", help="Stop a job in PAI.")
+@click.command(name='stop', help="Stop a job in PAI.")
 @click.argument('jobname', type=str, nargs=-1)
-@click.option("--profile", type=str, default="default", help="Use a specified profile.")
+@click.option('--profile', '-p', type=str, default='default', help="Use a specified profile.")
 def stopcmd(jobname, profile):
     config = Config(profile)
     _load(config)
@@ -242,9 +242,9 @@ def stopcmd(jobname, profile):
             exit(1)
 
 
-@click.command(name="host", help="Show host information of a job.")
+@click.command(name='host', help="Show host information of a job.")
 @click.argument('jobname', type=str)
-@click.option("--profile", type=str, default="default", help="Use a specified profile.")
+@click.option('--profile', '-p', type=str, default='default', help="Use a specified profile.")
 def hostcmd(jobname, profile):
     config = Config(profile)
     _load(config)
