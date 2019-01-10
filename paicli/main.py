@@ -296,7 +296,7 @@ main.add_command(hostcmd)
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG,
+    logging.basicConfig(level=logging.INFO,
                         format='[%(asctime)s] %(module)s.%(funcName)s %(levelname)s \t: %(message)s')
     logging.debug("Program start.")
     main()
