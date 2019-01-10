@@ -63,33 +63,8 @@ class API(object):
         else:
             res.raise_for_status()
 
-    def post_jobs(self, job_config_json):
-        """NOTE: DEPRECATED. Use post_user_username_jobs"""
-        url = "{}/api/{}/jobs".format(self.config.api_uri, self.config.api_version)
-        headers = self._headers_with_auth()
-
-        res = requests.post(url, headers=headers, data=job_config_json)
-
-        if res.ok:
-            return to_str(res.content)
-        else:
-            res.raise_for_status()
-
     def get_jobs_jobname_config(self, jobname):
         pass
-
-    def get_jobs_jobname_ssh(self, jobname):
-        # NOTE DEPRECATED
-        #
-        # This api is removed in the latest api
-        #
-        url = "{}/api/{}/jobs/{}/ssh".format(self.config.api_uri, self.config.api_version, jobname)
-        res = requests.get(url)
-
-        if res.ok:
-            return to_str(res.content)
-        else:
-            res.raise_for_status()
 
     def get_user_username_jobs_jobname_ssh(self, username, jobname):
         url = "{}/api/{}/user/{}/jobs/{}/ssh".format(
@@ -117,18 +92,6 @@ class API(object):
         url = "{}/api/{}/user/{}/jobs/{}/ssh".format(self.config.api_uri, self.config.api_version, username, jobname)
         res = requests.get(url)
 
-        if res.ok:
-            return to_str(res.content)
-        else:
-            res.raise_for_status()
-
-    def put_jobs_jobname_executiontype(self, jobname, value):
-        """NOTE: DEPRECATED."""
-        url = "{}/api/{}/jobs/{}/executionType".format(self.config.api_uri, self.config.api_version, jobname)
-        headers = self._headers_with_auth()
-        data = json.dumps({"value": value})
-
-        res = requests.put(url, headers=headers, data=data)
         if res.ok:
             return to_str(res.content)
         else:
