@@ -33,7 +33,7 @@ def _load(config):
     try:
         config.load()
     except FileNotFoundError as e:
-        print("Config file does not exist. Run 'paicli config'")
+        print("Config file does not exist. Run 'pai config'")
         exit(1)
 
 
@@ -176,7 +176,7 @@ def submitcmd(job_config_json, profile):
             if status_code == 401:
                 print(colored("Submission failed.", "red"))
                 print("Access token seems to be expired.")
-                print("Update your token by 'paicli token', then try again.\n")
+                print("Update your token by 'pai token', then try again.\n")
             elif status_code == 400:
                 print(colored("Submission failed.", "red"))
                 print("This may be caused by duplicated submission.\n")
@@ -198,7 +198,7 @@ def submitcmd(job_config_json, profile):
             exit(1)
         except FileNotFoundError as e:
             print(colored("Submission failed.\n", "red"))
-            print("Access token does not exist. Run 'paicli token'")
+            print("Access token does not exist. Run 'pai token'")
             exit(1)
 
 
@@ -238,7 +238,7 @@ def stopcmd(jobname, profile):
             exit(1)
         except FileNotFoundError:
             print(colored("Failed to submit a stop signal.\n", "red"))
-            print("Access token does not exist. Run 'paicli token'")
+            print("Access token does not exist. Run 'pai token'")
             exit(1)
 
 
