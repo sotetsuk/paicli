@@ -130,7 +130,7 @@ def sshcmd(jobname, task_name, task_index, username, command, dryrun, profile):
 @click.option('--state', '-s', multiple=True)
 @click.option('--num-jobs', '-n', type=int, default=20)
 @click.option('--profile', '-p', type=str, default='default', help="Use a specified profile.")
-def jobscmd(username, state, n, profile):
+def jobscmd(username, state, num_jobs, profile):
     config = Config(profile)
     _load(config)
     api = API(config)
@@ -143,7 +143,7 @@ def jobscmd(username, state, n, profile):
         filter_dic['state'] = state
     if filter_dic:
         jobs.filter(filter_dic)
-    jobs.show(n)
+    jobs.show(num_jobs)
 
 
 @click.command(name='submit',
