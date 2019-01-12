@@ -1,20 +1,26 @@
 # paicli
 A CLI tool for PAI (Platform for AI).
 
+## How to install
+
+```
+$ pip install paicli
+```
+
 ## How to build
 
 ```sh
 $ make build
 ```
 
-## How to use
+## Commands
 
-- initialize config file: `$ paicli config`
-- submit a job: `$ paicli submit job_config.json`
-- ssh to a container: `$ paicli ssh`. Then select a job name (or specify the job name with `-j` option).
-- show job list: `$ paicli jobs`
-- stop a job: `$ paicli stop`. Then select a job name (or specify the job name with `-j` option)
-- generate new access token `$ paicli token` 
+- **pai config**: initialize config file.
+- **pai jobs**: show job list.
+- **pai token**: generate new access token.
+- **pai submit**: submit a job.
+- **pai stop**: stop a job.
+- **pai ssh**: ssh to a container.
 
 ## Config file
 Your config file will be set in `$HOME/.paicli`.
