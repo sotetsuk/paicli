@@ -15,15 +15,15 @@ $ make build
 
 ## Commands
 
-- **pai config**: initialize config file.
+- **pai config**: initialize the config file.
 - **pai jobs**: show job list.
-- **pai token**: generate new access token.
+- **pai token**: generate a new access token.
 - **pai submit**: submit a job.
 - **pai stop**: stop a job.
-- **pai ssh**: ssh to a container.
+- **pai ssh**: ssh into a container.
 
 ## Config file
-Your config file will be set in `$HOME/.paicli`.
+**pai config** will create your config file in `$HOME/.paicli`.
 You should set your `host`, `port`, `api_port` and `username`.
 Also, when you update your access token, you should enter your passwrod.
 
