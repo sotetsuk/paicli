@@ -33,7 +33,7 @@ def _load(config):
     try:
         config.load()
     except FileNotFoundError as e:
-        print("Config file does not exist. Run 'paicli config'")
+        print("Config file does not exist. Run 'pai config'")
         exit(1)
 
 
@@ -42,8 +42,8 @@ def main():
     pass
 
 
-@click.command("config", help="Add a your configuration in $HOME/.paicli")
-@click.option("--profile", type=str, default="default", help="Add another profile configuration.")
+@click.command('config', help="Add a your configuration in $HOME/.paicli")
+@click.option('--profile', '-p', type=str, default='default', help="Add another profile configuration.")
 def configcmd(profile):
     config = Config(profile)
     try:
@@ -56,9 +56,9 @@ def configcmd(profile):
     config.add_profile()  # Anyway, add new profile or modify the profile
 
 
-@click.command("token", help="Update access token.")
+@click.command('token', help="Update access token.")
 @click.option('--expiration', '-e', type=int, default=500000, help="Expiration time.")
-@click.option("--profile", type=str, default="default", help="Use a specified profile.")
+@click.option('--profile', '-p', type=str, default='default', help="Use a specified profile.")
 def tokencmd(expiration, profile):
     config = Config(profile)
     _load(config)
@@ -72,14 +72,14 @@ def tokencmd(expiration, profile):
         exit(1)
 
 
-@click.command(name="ssh", help="SSH into a running container in PAI.")
-@click.argument('jobname', type=str, default="")
-@click.option('--task-name', '-t', type=str, default="")
+@click.command(name='ssh', help="SSH into a running container in PAI.")
+@click.argument('jobname', type=str, default='')
+@click.option('--task-name', '-t', type=str, default='')
 @click.option('--task-index', '-i', type=int, default=-1)
-@click.option('--username', '-u', type=str, default="")
-@click.option('--command', '-c', type=str, default="")
+@click.option('--username', '-u', type=str, default='')
+@click.option('--command', '-c', type=str, default='')
 @click.option('--dryrun', '-d', is_flag=True)
-@click.option("--profile", type=str, default="default", help="Use a specified profile.")
+@click.option('--profile', '-p', type=str, default='default', help="Use a specified profile.")
 def sshcmd(jobname, task_name, task_index, username, command, dryrun, profile):
     config = Config(profile)
     _load(config)
@@ -105,7 +105,7 @@ def sshcmd(jobname, task_name, task_index, username, command, dryrun, profile):
         # This method is duplicated in the latest API
         # So this nested try-catch should be removed in the near future
         try:
-            content = json.loads(api.get_jobs_jobname_ssh(_jobname))
+            content = json.loads(api.get_user_username_jobs_jobname_ssh(config.username, _jobname))
         except requests.HTTPError as e:
             status_code = e.response.status_code
             if status_code == 404:
@@ -125,12 +125,12 @@ def sshcmd(jobname, task_name, task_index, username, command, dryrun, profile):
         exit(1)
 
 
-@click.command(name="jobs", help="Show jobs in PAI.")
+@click.command(name='jobs', help="Show jobs in PAI.")
 @click.option('--username', '-u', multiple=True)
 @click.option('--state', '-s', multiple=True)
-@click.option('-n', type=int, default=20)
-@click.option("--profile", type=str, default="default", help="Use a specified profile.")
-def jobscmd(username, state, n, profile):
+@click.option('--num-jobs', '-n', type=int, default=20)
+@click.option('--profile', '-p', type=str, default='default', help="Use a specified profile.")
+def jobscmd(username, state, num_jobs, profile):
     config = Config(profile)
     _load(config)
     api = API(config)
@@ -143,13 +143,13 @@ def jobscmd(username, state, n, profile):
         filter_dic['state'] = state
     if filter_dic:
         jobs.filter(filter_dic)
-    jobs.show(n)
+    jobs.show(num_jobs)
 
 
-@click.command(name="submit",
+@click.command(name='submit',
                help="Submit your job into PAI. With no json files, or when '-' is specified, read standard input.")
 @click.argument('job_config_json', nargs=-1, required=False)
-@click.option("--profile", type=str, default="default", help="Use a specified profile.")
+@click.option('--profile', '-p', type=str, default='default', help="Use a specified profile.")
 def submitcmd(job_config_json, profile):
     config = Config(profile)
     _load(config)
@@ -168,7 +168,7 @@ def submitcmd(job_config_json, profile):
 
     for _job_config_json in job_config_json_list:
         try:
-            api.post_jobs(_job_config_json)
+            api.post_user_username_jobs(config.username, _job_config_json)
             print(colored("Successfully submitted!", "green") + ": {}"
                   .format(json.loads(_job_config_json)['jobName']))
         except requests.HTTPError as e:
@@ -176,7 +176,7 @@ def submitcmd(job_config_json, profile):
             if status_code == 401:
                 print(colored("Submission failed.", "red"))
                 print("Access token seems to be expired.")
-                print("Update your token by 'paicli token', then try again.\n")
+                print("Update your token by 'pai token', then try again.\n")
             elif status_code == 400:
                 print(colored("Submission failed.", "red"))
                 print("This may be caused by duplicated submission.\n")
@@ -198,13 +198,13 @@ def submitcmd(job_config_json, profile):
             exit(1)
         except FileNotFoundError as e:
             print(colored("Submission failed.\n", "red"))
-            print("Access token does not exist. Run 'paicli token'")
+            print("Access token does not exist. Run 'pai token'")
             exit(1)
 
 
-@click.command(name="stop", help="Stop a job in PAI.")
+@click.command(name='stop', help="Stop a job in PAI.")
 @click.argument('jobname', type=str, nargs=-1)
-@click.option("--profile", type=str, default="default", help="Use a specified profile.")
+@click.option('--profile', '-p', type=str, default='default', help="Use a specified profile.")
 def stopcmd(jobname, profile):
     config = Config(profile)
     _load(config)
@@ -218,7 +218,7 @@ def stopcmd(jobname, profile):
 
     for _jobname in jobname:
         try:
-            api.put_jobs_jobname_executiontype(_jobname, "STOP")
+            api.put_user_username_jobs_jobname_executiontype(config.username, _jobname, "STOP")
             print(colored("Stop signal submitted!", "green") + ": {}".format(_jobname))
         except requests.HTTPError as e:
             print(colored("Failed to submit a stop signal.\n", "red"))
@@ -238,13 +238,13 @@ def stopcmd(jobname, profile):
             exit(1)
         except FileNotFoundError:
             print(colored("Failed to submit a stop signal.\n", "red"))
-            print("Access token does not exist. Run 'paicli token'")
+            print("Access token does not exist. Run 'pai token'")
             exit(1)
 
 
-@click.command(name="host", help="Show host information of a job.")
+@click.command(name='host', help="Show host information of a job.")
 @click.argument('jobname', type=str)
-@click.option("--profile", type=str, default="default", help="Use a specified profile.")
+@click.option('--profile', '-p', type=str, default='default', help="Use a specified profile.")
 def hostcmd(jobname, profile):
     config = Config(profile)
     _load(config)

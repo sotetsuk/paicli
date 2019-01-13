@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='paicli',
-    version="0.4.2",
+    version="0.5.0",
     description='Client for PAI',
     author='Sotetsu KOYAMADA',
     url='',
@@ -18,7 +18,7 @@ setup(
                       ],
     packages=find_packages(),
     entry_points={
-        'console_scripts': 'paicli = paicli.main:main'
+        'console_scripts': 'pai = paicli.main:main'
     },
     classifiers=[
         "Programming Language :: Python :: 3.5",

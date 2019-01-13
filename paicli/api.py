@@ -63,27 +63,25 @@ class API(object):
         else:
             res.raise_for_status()
 
-    def post_jobs(self, job_config_json):
-        url = "{}/api/{}/jobs".format(self.config.api_uri, self.config.api_version)
-        headers = self._headers_with_auth()
+    def get_jobs_jobname_config(self, jobname):
+        pass
 
-        res = requests.post(url, headers=headers, data=job_config_json)
+    def get_user_username_jobs_jobname_ssh(self, username, jobname):
+        url = "{}/api/{}/user/{}/jobs/{}/ssh".format(
+            self.config.api_uri, self.config.api_version, username, jobname
+        )
+        res = requests.get(url)
 
         if res.ok:
             return to_str(res.content)
         else:
             res.raise_for_status()
 
-    def get_jobs_jobname_config(self, jobname):
-        pass
+    def post_user_username_jobs(self, username, job_config_json):
+        url = "{}/api/{}/user/{}/jobs".format(self.config.api_uri, self.config.api_version, username)
+        headers = self._headers_with_auth()
 
-    def get_jobs_jobname_ssh(self, jobname):
-        # NOTE DEPRECATED
-        #
-        # This api is removed in the latest api
-        #
-        url = "{}/api/{}/jobs/{}/ssh".format(self.config.api_uri, self.config.api_version, jobname)
-        res = requests.get(url)
+        res = requests.post(url, headers=headers, data=job_config_json)
 
         if res.ok:
             return to_str(res.content)
@@ -99,8 +97,10 @@ class API(object):
         else:
             res.raise_for_status()
 
-    def put_jobs_jobname_executiontype(self, jobname, value):
-        url = "{}/api/{}/jobs/{}/executionType".format(self.config.api_uri, self.config.api_version, jobname)
+    def put_user_username_jobs_jobname_executiontype(self, username, jobname, value):
+        url = "{}/api/{}/user/{}/jobs/{}/executionType".format(
+            self.config.api_uri, self.config.api_version, username, jobname
+        )
         headers = self._headers_with_auth()
         data = json.dumps({"value": value})
 
