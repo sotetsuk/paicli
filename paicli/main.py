@@ -37,7 +37,7 @@ def _load(config):
         exit(1)
 
 
-@click.group(help="A CLI tool for PAI (Platform for AI).")
+@click.group(help="A CLI tool for OpenPAI.")
 def main():
     pass
 

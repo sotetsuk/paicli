@@ -4,21 +4,30 @@
 # paicli
 A CLI tool for [OpenPAI](https://github.com/microsoft/pai).
 
+```
+$ pai --help
+Usage: pai [OPTIONS] COMMAND [ARGS]...
+
+  A CLI tool for OpenPAI.
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  config  Add a your configuration in $HOME/.paicli
+  host    Show host information of a job.
+  jobs    Show jobs in PAI.
+  ssh     SSH into a running container in PAI.
+  stop    Stop a job in PAI.
+  submit  Submit your job into PAI.
+  token   Update access token.
+```
+
 ## How to install
 
 ```
 $ pip install paicli
 ```
-
-## Commands
-
-- `pai config`: initialize the config file.
-- `pai jobs`: show job list.
-- `pai token`: generate a new access token.
-- `pai submit`: submit a job.
-- `pai stop`: stop a job.
-- `pai ssh`: ssh into a container.
-- `pai host`: show ip/port information of a job.
 
 ## Practical examples
 One can utilize `pai` subcommands to achieve several practical operations.
