@@ -32,7 +32,7 @@ $ pip install paicli
 ## Practical examples
 One can utilize the ommands to achieve several practical operations.
 
-### Submit multiple jobs with one line
+### 1. Submit multiple jobs with one line
 
 Use `pai submit` and some template engine like [envsubst](https://www.gnu.org/software/gettext/manual/html_node/envsubst-Invocation.html).
 
@@ -43,7 +43,7 @@ $ head template.json -n 2
 $ for i in `seq 1 3`; do cat template.json | JOBID=$i envsubst | pai submit; done
 ```
 
-### Stop multiple jobs with one line
+### 2. Stop multiple jobs with one line
 
 Combine `pai jobs` and `pai stop`.
 
@@ -51,7 +51,7 @@ Combine `pai jobs` and `pai stop`.
 $ pai jobs -u sotetsuk -s RUNNING | grep template | awk '{print $1}' | xargs pai stop
 ```
 
-### Ssh into multiple running containers and run the same command
+### 3. Ssh into multiple running containers and run the same command
 
 Combine `pai jobs` and `pai ssh`. In this example, show python processes in multiple jobs with one line.
 
@@ -59,7 +59,7 @@ Combine `pai jobs` and `pai ssh`. In this example, show python processes in mult
 $ pai jobs -u sokoya -s RUNNING | grep template | awk '{print $1}' | xargs -n 1 pai ssh -c "ps -aux | grep python"
 ```
 
-### Show all tensorboard URLs in running jobs
+### 4. Show all tensorboard URLs in running jobs
 
 Combine `pai jobs` and `pai host` to show all tensorboard URLs. One can use some browser extention to open all URLs (e.g., [OpenList](https://chrome.google.com/webstore/detail/openlist/nkpjembldfckmdchbdiclhfedcngbgnl?hl=en))
 
