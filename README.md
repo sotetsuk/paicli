@@ -14,13 +14,13 @@ Options:
   --help  Show this message and exit.
 
 Commands:
-  config  Add a your configuration in $HOME/.paicli
-  host    Show host information of a job.
-  jobs    Show jobs in PAI.
-  ssh     SSH into a running container in PAI.
-  stop    Stop a job in PAI.
-  submit  Submit your job into PAI.
-  token   Update access token.
+  config  Write your configuration to a file.
+  host    Show host information of the specified job.
+  jobs    Show job list.
+  ssh     SSH into a running container.
+  stop    Stop a running job.
+  submit  Submit your job.
+  token   Generate a new access token
 ```
 
 ## How to install
