@@ -84,10 +84,10 @@ def sshcmd(jobname, task_name, task_index, username, command, dryrun, profile):
     config = Config(profile)
     _load(config)
     api = API(config)
+    if not username:
+        username = config.username
 
     if not jobname:
-        if not username:
-            username = config.username
         jobs = Jobs(api, username)
         jobs.filter({'state': ['RUNNING']})
         if len(jobs) == 0:
@@ -102,8 +102,6 @@ def sshcmd(jobname, task_name, task_index, username, command, dryrun, profile):
     try:
         content = json.loads(api.get_user_username_jobs_jobname_ssh(username, _jobname))
     except requests.HTTPError as e:
-        # This method is duplicated in the latest API
-        # So this nested try-catch should be removed in the near future
         try:
             content = json.loads(api.get_user_username_jobs_jobname_ssh(config.username, _jobname))
         except requests.HTTPError as e:
@@ -118,7 +116,7 @@ def sshcmd(jobname, task_name, task_index, username, command, dryrun, profile):
             exit(1)
 
     try:
-        run_ssh(api, _jobname, task_name, task_index, config, content, command, dryrun)
+        run_ssh(api, username, _jobname, task_name, task_index, config, content, command, dryrun)
     except KeyError:  # TODO: raise/catch original error
         print(colored("SSH failed.", "red"))
         print("There is no match task.\n")  # TODO: give more information
@@ -244,17 +242,20 @@ def stopcmd(jobname, profile):
 
 @click.command(name='host', help="Show host information of a job.")
 @click.argument('jobname', type=str)
+@click.option('--username', '-u', type=str, default='')
 @click.option('--profile', '-p', type=str, default='default', help="Use a specified profile.")
-def hostcmd(jobname, profile):
+def hostcmd(jobname, username, profile):
     config = Config(profile)
     _load(config)
     api = API(config)
+    if not username:
+        username = config.username
 
     tab = PrettyTable()
     tab.field_names = ["task role", "ip", "port label", "port"]
 
     try:
-        ret = api.get_jobs_jobname(jobname)
+        ret = api.get_user_username_jobs_jobname(username, jobname)
         tasks = json.loads(ret)['taskRoles']
         for k, v in tasks.items():
             task_name = k
