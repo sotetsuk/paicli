@@ -30,7 +30,7 @@ $ pip install paicli
 ```
 
 ## Practical examples
-One can utilize the ommands to achieve several practical operations.
+One can utilize the commands to achieve several practical operations.
 
 ### 1. Submit multiple jobs with one line
 
