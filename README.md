@@ -1,3 +1,6 @@
+[![PyPI version](https://badge.fury.io/py/paicli.svg)](https://badge.fury.io/py/paicli)
+[![License MIT](https://img.shields.io/github/license/sotetsuk/paicli.svg)](https://github.com/sotetsuk/paicli/blob/master/LICENSE)
+
 # paicli
 A CLI tool for PAI (Platform for AI).
 
