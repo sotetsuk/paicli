@@ -18,6 +18,7 @@ $ pip install paicli
 - **pai submit**: submit a job.
 - **pai stop**: stop a job.
 - **pai ssh**: ssh into a container.
+- **pai host**: show ip/port information of a job.
 
 ## Config file
 **pai config** will create your config file in `$HOME/.paicli`.

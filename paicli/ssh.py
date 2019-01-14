@@ -13,7 +13,7 @@ from .utils import to_str
 from .intereactive import select_choices_interactively
 
 
-def run_ssh(api, jobname, task_name, task_index, config, content, command="", dryrun=False):
+def run_ssh(api, username, jobname, task_name, task_index, config, content, command="", dryrun=False):
     sshkey = _download_sshkey(content)
     path_to_sshkey = os.path.join(config.path_to_configdir, ".tmpkey")
 
@@ -27,7 +27,7 @@ def run_ssh(api, jobname, task_name, task_index, config, content, command="", dr
     # if the job has >= 2 tasks
     else:
         choices = []
-        ret = api.get_jobs_jobname(jobname) # TODO: Error handling
+        ret = api.get_user_username_jobs_jobname(username, jobname) # TODO: Error handling
         tasks = json.loads(ret)['taskRoles']
         for k, v in tasks.items():
             _task_name = k

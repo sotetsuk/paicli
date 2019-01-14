@@ -54,8 +54,10 @@ class API(object):
         else:
             res.raise_for_status()
 
-    def get_jobs_jobname(self, jobname):
-        url = "{}/api/{}/jobs/{}".format(self.config.api_uri, self.config.api_version, jobname)
+    def get_user_username_jobs_jobname(self, username, jobname):
+        url = "{}/api/{}/user/{}/jobs/{}".format(
+            self.config.api_uri, self.config.api_version, username, jobname
+        )
         res = requests.get(url)
 
         if res.ok:
