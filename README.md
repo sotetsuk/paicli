@@ -2,18 +2,12 @@
 [![License MIT](https://img.shields.io/github/license/sotetsuk/paicli.svg)](https://github.com/sotetsuk/paicli/blob/master/LICENSE)
 
 # paicli
-A CLI tool for PAI (Platform for AI).
+A CLI tool for [OpenPAI](https://github.com/microsoft/pai).
 
 ## How to install
 
 ```
 $ pip install paicli
-```
-
-## How to build
-
-```sh
-$ make build
 ```
 
 ## Commands
@@ -29,6 +23,12 @@ $ make build
 **pai config** will create your config file in `$HOME/.paicli`.
 You should set your `host`, `port`, `api_port` and `username`.
 Also, when you update your access token, you should enter your passwrod.
+
+## How to build from source
+
+```sh
+$ make build
+```
 
 ## Author
 Sotetsu KOYAMADA
