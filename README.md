@@ -56,7 +56,7 @@ $ pai jobs -u sotetsuk -s RUNNING | grep template | awk '{print $1}' | xargs pai
 Combine `pai jobs` and `pai ssh`. In this example, show python processes in multiple jobs with one line.
 
 ```sh
-$ pai jobs -u sokoya -s RUNNING | grep template | awk '{print $1}' | xargs -n 1 pai ssh -c "ps -aux | grep python"
+$ pai jobs -u sotetsuk -s RUNNING | grep template | awk '{print $1}' | xargs -n 1 pai ssh -c "ps -aux | grep python"
 ```
 
 ### 4. Show all tensorboard URLs in running jobs
