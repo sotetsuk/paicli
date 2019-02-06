@@ -2,7 +2,18 @@
 [![License MIT](https://img.shields.io/github/license/sotetsuk/paicli.svg)](https://github.com/sotetsuk/paicli/blob/master/LICENSE)
 
 # paicli
-A CLI tool for [OpenPAI](https://github.com/microsoft/pai).
+
+A CLI tool for [OpenPAI](https://github.com/microsoft/pai), which supports basic opperations like listing up jobs, submitting a new job, suspending a running job, and executing ssh into a running container.
+
+[![asciicast](https://asciinema.org/a/225718.svg)](https://asciinema.org/a/225718)
+
+## How to install
+
+```
+$ pip install paicli
+```
+
+## Basic usage
 
 ```
 $ pai --help
@@ -23,14 +34,13 @@ Commands:
   token   Generate a new access token
 ```
 
-## How to install
+## Configuration
 
-```
-$ pip install paicli
-```
+- **Config file**: To initialize your config file, run `pai config`. Then your config file will be located in `$HOME/.paicli`. You should set your `host`, `port`, `api_port` and `username`.
+- **Access token**: Before submitting/stopping a job, you should issue your access token by executing `pai token` and entering your password. You can skip entering password everytime if you write your password directly to your config file (not recommended).
 
 ## Practical examples
-One can utilize the commands to achieve several practical operations.
+One can utilize and combine the paicli subcommands to achieve several practical operations.
 
 ### 1. Submit multiple jobs with one line
 
@@ -68,18 +78,6 @@ $ pai jobs -u sotetsuk -s RUNNING | grep template | xargs -n 1 pai host | grep t
 http://10.0.0.1:9999
 http://10.0.0.2:9999
 http://10.0.0.3:9999
-```
-
-## Config file
-To initialize your config file, run `pai config`.
-Then your config file will be located in `$HOME/.paicli`.
-You should set your `host`, `port`, `api_port` and `username`.
-Also, when you update your access token, you should enter your passwrod.
-
-## How to build from source
-
-```sh
-$ make build
 ```
 
 ## Author
