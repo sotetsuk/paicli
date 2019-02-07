@@ -8,12 +8,14 @@ A CLI tool for [OpenPAI](https://github.com/microsoft/pai), which supports basic
 [![demo](./demo.gif)](https://asciinema.org/a/225718)
 
 ## How to install
+One can install paicli from [PyPI](https://pypi.org/project/paicli/).
 
 ```
 $ pip install paicli
 ```
 
 ## Basic usage
+For more detailed usage, one can use `--help` option for each subcommand like `pai config --help`.
 
 ```
 $ pai --help
@@ -36,7 +38,7 @@ Commands:
 
 ## Configuration
 
-- **Config file**: To initialize your config file, run `pai config`. Then your config file will be located in `$HOME/.paicli`. You should set your `host`, `port`, `api_port` and `username`.
+- **Config file**: To initialize your config file, run `pai config`. Then your config file will be located in `$HOME/.paicli`. You should set your `host`, `port`, and `username`.
 - **Access token**: Before submitting/stopping a job, you should issue your access token by executing `pai token` and entering your password. You can skip entering password everytime if you write your password directly to your config file (not recommended).
 
 ## Practical examples
