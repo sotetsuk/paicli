@@ -1,9 +1,14 @@
 from setuptools import setup, find_packages
 
+with open('README.md') as f:
+    long_description = f.read()
+
 setup(
     name='paicli',
-    version="0.5.2",
+    version="0.5.3",
     description='Client for PAI',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     author='Sotetsu KOYAMADA',
     url='',
     author_email='koyamada-s@sys.i.kyoto-u.ac.jp',
