@@ -5,7 +5,7 @@
 
 A CLI tool for [OpenPAI](https://github.com/microsoft/pai), which supports basic opperations like listing up jobs, submitting a new job, suspending a running job, and executing ssh into a running container.
 
-[![asciicast](https://asciinema.org/a/225718.svg)](https://asciinema.org/a/225718)
+[![demo](./demo.gif)](https://asciinema.org/a/225718)
 
 ## How to install
 
