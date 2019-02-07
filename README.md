@@ -1,4 +1,5 @@
 [![PyPI version](https://badge.fury.io/py/paicli.svg)](https://badge.fury.io/py/paicli)
+![Python version](https://img.shields.io/pypi/pyversions/paicli.svg?style=flat)
 [![License MIT](https://img.shields.io/github/license/sotetsuk/paicli.svg)](https://github.com/sotetsuk/paicli/blob/master/LICENSE)
 
 # paicli
