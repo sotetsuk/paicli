@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='paicli',
-    version="0.5.1",
+    version="0.5.2",
     description='Client for PAI',
     author='Sotetsu KOYAMADA',
     url='',
