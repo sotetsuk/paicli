@@ -38,8 +38,9 @@ Commands:
 ```
 
 ## Configuration
+Before utilizing paicli subcommands, you have to initialize your configuration about your PAI environment.
 
-- **Config file**: To initialize your config file, run `pai config`. Then your config file will be located in `$HOME/.paicli`. You should set your `host`, `port`, and `username`.
+- **Config file**: To initialize your config file, run `pai config`. Then your config file will be located in `$HOME/.paicli`. You should set your `host`, `port`, and `username`. You can use `--profile` option to use multiple PAI environments.
 - **Access token**: Before submitting/stopping a job, you should issue your access token by executing `pai token` and entering your password. You can skip entering password everytime if you write your password directly to your config file (not recommended).
 
 ## Practical examples
