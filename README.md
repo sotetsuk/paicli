@@ -15,34 +15,6 @@ One can install paicli from [PyPI](https://pypi.org/project/paicli/).
 $ pip install paicli
 ```
 
-## Basic usage
-For more detailed usage, one can use `--help` option for each subcommand like `pai config --help`.
-
-```
-$ pai --help
-Usage: pai [OPTIONS] COMMAND [ARGS]...
-
-  A CLI tool for OpenPAI.
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  config  Write your configuration to a file.
-  host    Show host information of the specified job.
-  jobs    Show job list.
-  ssh     SSH into a running container.
-  stop    Stop a running job.
-  submit  Submit your job.
-  token   Generate a new access token
-```
-
-## Configuration
-Before utilizing paicli subcommands, you have to initialize your configuration about your PAI environment.
-
-- **Config file**: To initialize your config file, run `pai config`. Then your config file will be located in `$HOME/.paicli`. You should set your `host`, `port`, and `username`. You can use `--profile` option to use multiple PAI environments.
-- **Access token**: Before submitting/stopping a job, you should issue your access token by executing `pai token` and entering your password. You can skip entering password everytime if you write your password directly to your config file (not recommended).
-
 ## Motivating examples
 One can utilize and combine the paicli subcommands to achieve several practical operations.
 
@@ -99,6 +71,34 @@ http://10.0.0.1:9999
 http://10.0.0.2:9999
 http://10.0.0.3:9999
 ```
+
+## Basic usage
+For more detailed usage, one can use `--help` option for each subcommand like `pai config --help`.
+
+```
+$ pai --help
+Usage: pai [OPTIONS] COMMAND [ARGS]...
+
+  A CLI tool for OpenPAI.
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  config  Write your configuration to a file.
+  host    Show host information of the specified job.
+  jobs    Show job list.
+  ssh     SSH into a running container.
+  stop    Stop a running job.
+  submit  Submit your job.
+  token   Generate a new access token
+```
+
+## Configuration
+Before utilizing paicli subcommands, you have to initialize your configuration about your PAI environment.
+
+- **Config file**: To initialize your config file, run `pai config`. Then your config file will be located in `$HOME/.paicli`. You should set your `host`, `port`, and `username`. You can use `--profile` option to use multiple PAI environments.
+- **Access token**: Before submitting/stopping a job, you should issue your access token by executing `pai token` and entering your password. You can skip entering password everytime if you write your password directly to your config file (not recommended).
 
 ## Author
 Sotetsu KOYAMADA
