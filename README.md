@@ -20,7 +20,7 @@ One can utilize and combine the paicli subcommands to achieve several practical 
 
 ### 1. Ssh into a running container
 
-When you want to ssh into a running container, all you have to do is just type "pai ssh":
+When you want to ssh into a running container, all you have to do is just type `pai ssh`:
 
 ```
 $ pai ssh
@@ -55,7 +55,7 @@ $ pai jobs -u sotetsuk -s RUNNING | grep example_job | awk '{print $1}' | xargs 
 
 ### 4. Ssh into multiple running containers and run the same command
 
-One can combine `pai jobs` and `pai ssh`. In this example, show python processes in multiple jobs with one line.
+One can combine `pai jobs` and `pai ssh`. In this example, it shows python processes in multiple jobs with one line.
 
 ```sh
 $ pai jobs -u sotetsuk -s RUNNING | grep example_job | awk '{print $1}' | xargs -n 1 pai ssh -c "ps -aux | grep python"
