@@ -5,7 +5,7 @@ with open('README.md') as f:
 
 setup(
     name='paicli',
-    version="0.5.4",
+    version="0.6.0",
     description='Client for PAI',
     long_description=long_description,
     long_description_content_type='text/markdown',
