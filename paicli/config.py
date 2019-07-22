@@ -54,7 +54,7 @@ class Config(object):
     def load(self):
         with codecs.open(self.path_to_configfile, 'r', 'utf-8') as f:
             yaml_config = ''.join(f.readlines())
-            config = yaml.load(yaml_config)
+            config = yaml.load(yaml_config, Loader=yaml.SafeLoader)
 
         self.host = config[self.profile]["host"]
         self.port = config[self.profile]["port"]
